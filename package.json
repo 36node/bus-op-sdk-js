@@ -1,5 +1,5 @@
 {
-  "name": "bus-op-sdk-js",
+  "name": "@36node/bus-op-sdk",
   "version": "0.0.1",
   "description": "bus-op SDK.",
   "repository": {
