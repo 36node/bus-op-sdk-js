@@ -77,7 +77,7 @@ declare namespace SDK {
         line?: string;
         plate?: string;
         vehicleModel?: string;
-        vehicleBriefModel?: string;
+        vehicleModelBrief?: string;
         vehicleNo: {
           $regex?: string;
         };
@@ -169,7 +169,7 @@ declare namespace SDK {
         plate?: string;
         vehicle?: string;
         vehicleModel?: string;
-        vehicleBriefModel?: string;
+        vehicleModelBrief?: string;
         vehicleNo?: string;
         vehicleProducer?: string;
         vehicleMileage: {
@@ -196,7 +196,7 @@ declare namespace SDK {
       limit?: number;
       offset?: number;
       sort?: string;
-      group?: number;
+      group?: string;
 
       filter: {
         type?: string;
@@ -204,7 +204,7 @@ declare namespace SDK {
         line?: string;
         plate?: string;
         vehicleModel?: string;
-        vehicleBriefModel?: string;
+        vehicleModelBrief?: string;
         vehicleNo: {
           $regex?: string;
         };
@@ -245,7 +245,7 @@ declare namespace SDK {
       limit?: number;
       offset?: string;
       sort?: string;
-      group?: number;
+      group?: string;
 
       filter: {
         type?: string;
@@ -260,7 +260,7 @@ declare namespace SDK {
         plate?: string;
         vehicle?: string;
         vehicleModel?: string;
-        vehicleBriefModel?: string;
+        vehicleModelBrief?: string;
         vehicleNo?: string;
         vehicleProducer?: string;
         vehicleMileage: {
@@ -303,7 +303,7 @@ declare namespace SDK {
     state: string;
     vehicle: string;
     vehicleModel: string;
-    vehicleBriefModel: string;
+    vehicleModelBrief: string;
     vehicleNo: string;
     vehicleMileage: Number;
     vehicleYearsFromPlate: Number;
@@ -320,7 +320,7 @@ declare namespace SDK {
     state: string;
     vehicle: string;
     vehicleModel: string;
-    vehicleBriefModel: string;
+    vehicleModelBrief: string;
     vehicleNo: string;
     vehicleMileage: Number;
     vehicleYearsFromPlate: Number;
@@ -353,7 +353,7 @@ declare namespace SDK {
     type: string;
     vehicle: string;
     vehicleModel: string;
-    vehicleBriefModel: string;
+    vehicleModelBrief: string;
     vehicleNo: string;
     vehicleProducer: string;
     vehiclePlateAt: string;
@@ -370,7 +370,7 @@ declare namespace SDK {
     type: string;
     vehicle: string;
     vehicleModel: string;
-    vehicleBriefModel: string;
+    vehicleModelBrief: string;
     vehicleNo: string;
     vehicleProducer: string;
     vehicleYearsFromPlate: number;

@@ -26,21 +26,6 @@ function randomModel() {
   };
 }
 
-function randomCompany() {
-  const company = faker.random.arrayElement(companies);
-  return company.name;
-}
-
-function randomConvoy() {
-  const company = faker.random.arrayElement(companies);
-  const convoy = faker.random.arrayElement(company.convoys);
-
-  return {
-    company: company.name,
-    convoy: convoy.name,
-  };
-}
-
 function randomLine() {
   const company = faker.random.arrayElement(companies);
   const convoy = faker.random.arrayElement(company.convoys);
@@ -96,8 +81,6 @@ function randomChargeStatus() {
 module.exports = {
   randomLevel,
   randomChargeStatus,
-  randomCompany,
-  randomConvoy,
   randomLine,
   randomProducer,
   randomModel,

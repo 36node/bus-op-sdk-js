@@ -81,4 +81,19 @@ describe("## SDK bus-op", () => {
     const result = await sdk.warning.listWarnings();
     expect(result.body.length).toBe(100);
   });
+
+  it("should list warnings", async () => {
+    const result = await sdk.warning.listWarnings();
+    expect(result.body.length).toBe(100);
+  });
+
+  it("should list AlertStats", async () => {
+    const result = await sdk.statistics.getAlertStats();
+    expect(result.body.length).toBe(1);
+  });
+
+  it("should list WarningStats", async () => {
+    const result = await sdk.statistics.getWarningStats();
+    expect(result.body.length).toBe(1);
+  });
 });

@@ -17,11 +17,11 @@ module.exports = _.range(100).map(() => {
     updatedAt: new Date(), // 更新时间
     deleted: faker.random.boolean(), // 是否已经删除
     deletedAt: new Date(), // 删除时间
-    lastAt: new Date(), // 预警最后一次的时间
     count: faker.random.number({ min: 1, max: 1000 }), // 次数
     line: l.name, // 线路
     name: faker.random.word(), // 预警名称
     plate: v.plate, // 车牌号
+    lastAt: new Date(), // 预警最后一次的时间
     type: faker.random.word(), // 预警类型
     vehicle: v.no, // 车辆车架号
     vehicleModel: v.model, // 车型
