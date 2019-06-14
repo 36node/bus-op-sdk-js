@@ -1,6 +1,6 @@
 {
   "name": "@36node/bus-op-sdk",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "bus-op SDK.",
   "repository": {
     "url": "36node/bus-op-sdk-js",
