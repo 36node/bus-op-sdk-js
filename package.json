@@ -14,7 +14,8 @@
   "files": [
     "bin",
     "dist",
-    "mock"
+    "mock",
+    "typings"
   ],
   "config-overrides-path": "node_modules/@36node/sketch/config-overrides",
   "main": "dist/index.js",
