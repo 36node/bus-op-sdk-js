@@ -3,11 +3,11 @@ const _ = require("lodash");
 
 const vehicles = require("./vehicle");
 const companies = require("./company");
-const { Faults } = require("./utils/constants");
+const { Faults, NS } = require("./utils/constants");
 
 module.exports = _.range(100).map(() => {
   const c = faker.random.arrayElement(companies);
-  const l = faker.random.arrayElement(c.lines);
+  const l = faker.random.arrayElement(c.convoys);
   const f = faker.random.arrayElement(Faults);
   const v = faker.random.arrayElement(vehicles);
   const state = faker.random.arrayElement(["OPEN", "CLOSE"]);
@@ -18,7 +18,7 @@ module.exports = _.range(100).map(() => {
     updatedAt: new Date(), // 更新时间
     deleted: faker.random.boolean(), // 是否已经删除
     deletedAt: new Date(), // 删除时间
-    ns: faker.random.word(), // 报警所属命名空间
+    ns: faker.random.arrayElement(NS), // 报警所属命名空间
     startedAt: new Date(), // 开始报警的时间
     lastAt: new Date(), // 最近一次报警时间
     code: f.code.toString(16), // 故障码 16进制

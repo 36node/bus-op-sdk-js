@@ -72,6 +72,21 @@ const KeyStatus = ["OFF", "ACC", "ON", "START"];
 const State = ["UNKNOWN", "ONLINE", "OFFLINE"];
 
 /**
+ * NS
+ */
+const NS = ["/NS1", "/NS2", "/NS3"];
+
+/**
+ * 预警名称
+ */
+const AlertName = ["绝缘报警", "总电流极高", "电机严重故障"];
+
+/**
+ * 预警类型
+ */
+const AlertType = ["轮胎", "电池", "异常"];
+
+/**
  * all fault
  */
 const Faults = [
@@ -211,4 +226,7 @@ module.exports = {
   KeyStatus,
   State,
   Faults,
+  NS,
+  AlertName,
+  AlertType,
 };

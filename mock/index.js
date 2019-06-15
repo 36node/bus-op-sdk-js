@@ -1,3 +1,4 @@
+const _ = require("lodash");
 const faker = require("faker");
 
 const alerts = require("./alert");
@@ -10,26 +11,34 @@ const myRouter = (req, res, next) => {
   if (req.path.indexOf("statistics") !== -1) {
     const { group } = req.query;
     if (group && group.length) {
-      const tmp = [];
-      const a =
-        group[0] === "level"
-          ? [1, 2]
-          : [faker.random.word(), faker.random.word()];
-      const b =
-        group[1] === "level"
-          ? [1, 2]
-          : [faker.random.word(), faker.random.word()];
-      a.forEach(item => {
-        b.forEach(item2 => {
-          const t = {};
-          t[group[0]] = item;
-          t[group[1]] = item2;
-          t.count = faker.random.number({ min: 1, max: 1000 });
-          t.times = faker.random.number({ min: 1, max: 1000 });
-          tmp.push(t);
-        });
+      const data = req.path.indexOf("Alert") !== -1 ? alerts : warnings;
+      let arr = [];
+      group.forEach(item => {
+        const tmp = [...new Set(_.filter(data, item).map(x => x[item]))];
+        if (arr.length) {
+          let newArr = [];
+          arr.forEach(a => {
+            tmp.forEach(t => {
+              const newA = _.clone(a);
+              newA[item] = t;
+              newA.count = faker.random.number({ min: 1, max: 1000 });
+              newA.times = faker.random.number({ min: 1, max: 1000 });
+              newArr.push(newA);
+            });
+          });
+          arr = newArr;
+        } else {
+          tmp.forEach(t => {
+            const d = {
+              count: faker.random.number({ min: 1, max: 1000 }),
+              times: faker.random.number({ min: 1, max: 1000 }),
+            };
+            d[item] = t;
+            arr.push(d);
+          });
+        }
       });
-      return res.json(tmp);
+      return res.json(arr);
     } else {
       return res.json([
         {
