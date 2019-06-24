@@ -86,6 +86,16 @@ const AlertName = ["绝缘报警", "总电流极高", "电机严重故障"];
  */
 const AlertType = ["轮胎", "电池", "异常"];
 
+const WarningTypes = {
+  BATTERY_EXCEPTION: ["HIGH_TEMP_ALARM", "HIGH_TEMP_EXCEPTION", "LOW_SOC"], // 电池异常
+  INSULATION_EXCEPTION: [
+    "INSULATE_ALARM",
+    "INSULATE_EXCEPTION",
+    "INSULATE_NORMAL",
+  ], // 绝缘异常
+  TIRE_EXCEPTION: ["PRESSURE_TOO_LOW", "PRESSURE_TOO_HIGH", "TEMP_TOO_HIGHT"], // 轮胎异常
+};
+
 /**
  * all fault
  */
@@ -229,4 +239,5 @@ module.exports = {
   NS,
   AlertName,
   AlertType,
+  WarningTypes,
 };
