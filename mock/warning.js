@@ -1,39 +1,62 @@
 const faker = require("faker");
 const _ = require("lodash");
 
-const vehicles = require("./vehicle");
-const companies = require("./company");
-const producers = require("./producers");
+const { WarningTypes, Tires } = require("./utils/constants");
 
-const { WarningTypes } = require("./utils/constants");
+const fakeWarningData = type => {
+  switch (type) {
+    case "BATTERY_EXCEPTION":
+      return {
+        temperature: faker.random.number({ min: 10, max: 100 }),
+        soc: faker.random.number({ min: 10, max: 100 }),
+      };
+    case "INSULATION_EXCEPTION":
+      return {
+        resistance: faker.random.number({ min: 0, max: 1000, precision: 2 }),
+      };
+    case "TYRE_EXCEPTION":
+      const tire = faker.random.arrayElement(Tires);
+      return {
+        tire, // 轮胎
+        tp: faker.random.number({ min: 500, max: 1000 }), // 胎压
+        tt: faker.random.number({ min: 20, max: 100 }), // 胎温
+      };
+    default:
+      return {};
+  }
+};
 
-module.exports = _.range(100).map(() => {
-  const c = faker.random.arrayElement(companies);
-  const l = faker.random.arrayElement(c.convoys);
-  const v = faker.random.arrayElement(vehicles);
-  const producer = faker.random.arrayElement(producers);
-  const type = faker.random.arrayElement(Object.keys(WarningTypes));
-  const name = faker.random.arrayElement(WarningTypes[type]);
+const generate = (count = 100, vehicles = []) => {
+  return _.range(count).map(() => {
+    const vehicle = faker.random.arrayElement(vehicles);
+    const type = faker.random.arrayElement(Object.keys(WarningTypes));
+    const name = faker.random.arrayElement(WarningTypes[type]);
+    const data = fakeWarningData(type);
 
-  return {
-    id: faker.random.uuid(),
-    createdAt: new Date(), // 创建时间
-    updatedAt: new Date(), // 更新时间
-    deleted: faker.random.boolean(), // 是否已经删除
-    deletedAt: new Date(), // 删除时间
-    count: faker.random.number({ min: 1, max: 1000 }), // 次数
-    line: l.name, // 线路
-    name, // 预警名称
-    plate: v.plate, // 车牌号
-    lastAt: new Date(), // 预警最后一次的时间
-    type, // 预警类型
-    vehicle: v.no, // 车辆车架号
-    vehicleModel: v.model, // 车型
-    vehicleBriefModel: v.modelBrief, // 车型简称
-    vehicleNo: v.no, // 车辆自编号
-    vehicleProducer: producer, // 车辆生产商
-    vehiclePlateAt: new Date(), // 车辆上牌日期
-    vehicleYearsFromPlate: faker.random.number({ min: 1, max: 5 }), // 车辆使用年限
-    vehicleMileage: faker.random.number({ min: 100, max: 1000 }), // 车辆里程
-  };
-});
+    return {
+      id: faker.random.uuid(),
+      createdAt: faker.date.past(), // 创建时间
+      updatedAt: faker.date.past(), // 更新时间
+      startAt: faker.date.past(), // 开始时间
+      lastAt: faker.date.past(), // 最后发生时间
+      deleted: false, // 是否已经删除
+      count: faker.random.number({ min: 1, max: 1000 }), // 次数
+      line: vehicle.line,
+      name, // 预警名称
+      type, // 预警类型
+      plate: vehicle.plate, // 车牌号
+      ns: vehicle.ns, // 命名空间
+      data,
+      vehicle: vehicle.id, // 车辆车架号
+      vehicleModel: vehicle.model, // 车型
+      vehicleBriefModel: vehicle.modelBrief, // 车型简称
+      vehicleNo: vehicle.no, // 车辆自编号
+      vehicleProducer: vehicle.producer, // 车辆生产商
+      vehiclePlateAt: vehicle.plateAt, // 车辆上牌日期
+      vehicleYearsFromPlate: vehicle.lifeYear, // 车辆使用年限
+      vehicleMileage: faker.random.number({ min: 10000, max: 100000 }), // 车辆里程
+    };
+  });
+};
+
+module.exports = generate;

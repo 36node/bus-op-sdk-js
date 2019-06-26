@@ -6,7 +6,7 @@ const { toJsonServer } = require("@36node/query-normalizr");
 const mock = require("../mock");
 
 const { db = {}, rewrites = {}, routers = [] } = mock({
-  count: 100,
+  warningCount: 100,
 });
 
 const server = jsonServer.create();

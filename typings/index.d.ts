@@ -165,12 +165,22 @@ declare namespace SDK {
           $gt?: string;
           $lt?: string;
         };
+        startAt: {
+          $gt?: string;
+          $lt?: string;
+        };
         line?: string;
         plate?: string;
         vehicle?: string;
-        vehicleModel?: string;
-        vehicleModelBrief?: string;
-        vehicleNo?: string;
+        vehicleModel: {
+          $regex?: string;
+        };
+        vehicleModelBrief: {
+          $regex?: string;
+        };
+        vehicleNo: {
+          $regex?: string;
+        };
         vehicleProducer?: string;
         vehicleMileage: {
           $gt?: number;
@@ -203,6 +213,7 @@ declare namespace SDK {
         code?: string;
         line?: string;
         plate?: string;
+        vehicle?: string;
         vehicleModel?: string;
         vehicleModelBrief?: string;
         vehicleNo: {
@@ -350,6 +361,7 @@ declare namespace SDK {
     name: string;
     plate: string;
     lastAt: string;
+    startAt: string;
     type: string;
     vehicle: string;
     vehicleModel: string;
@@ -359,6 +371,8 @@ declare namespace SDK {
     vehiclePlateAt: string;
     vehicleYearsFromPlate: number;
     vehicleMileage: number;
+    data: {};
+    ns: Array<string>;
   };
 
   type WarningStats = {

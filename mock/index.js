@@ -62,14 +62,14 @@ const rewrites = {
  * @param {object} opt mock options
  * @param {number} opt.count how many pets to be generated
  */
-const mock = () => ({
+const mock = ({ warningCount = 1000, vehicles = require("./vehicle") }) => ({
   /**
    * mock data
    */
   db: {
     alerts,
     faults,
-    warnings,
+    warnings: warnings(warningCount, vehicles),
     statisticsAlert,
     statisticsWarning,
   },

@@ -89,12 +89,21 @@ const AlertType = ["轮胎", "电池", "异常"];
 const WarningTypes = {
   BATTERY_EXCEPTION: ["HIGH_TEMP_ALARM", "HIGH_TEMP_EXCEPTION", "LOW_SOC"], // 电池异常
   INSULATION_EXCEPTION: [
-    "INSULATE_ALARM",
-    "INSULATE_EXCEPTION",
+    "INSULATE_ALARM", // 绝缘告警
+    "INSULATE_EXCEPTION", // 绝缘异常
     "INSULATE_NORMAL",
   ], // 绝缘异常
-  TIRE_EXCEPTION: ["PRESSURE_TOO_LOW", "PRESSURE_TOO_HIGH", "TEMP_TOO_HIGHT"], // 轮胎异常
+  TYRE_EXCEPTION: ["PRESSURE_TOO_LOW", "PRESSURE_TOO_HIGH", "TEMP_TOO_HIGHT"], // 轮胎异常
 };
+
+const Tires = [
+  "lf", // 左前轮
+  "rf", // 右前轮
+  "lr1", // 左后轮1
+  "lr2", // 左后轮2
+  "rr1", // 右后轮1
+  "rr2", // 右后轮2
+];
 
 /**
  * all fault
@@ -240,4 +249,5 @@ module.exports = {
   AlertName,
   AlertType,
   WarningTypes,
+  Tires,
 };
