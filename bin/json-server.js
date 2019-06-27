@@ -18,6 +18,9 @@ server.use(middlewares);
 // rewrites
 server.use(jsonServer.rewriter(rewrites));
 
+// user defined routers
+server.use(jsonServer.bodyParser);
+
 // use query normalizr
 server.use((req, res, next) => {
   req.query = toJsonServer(req.query);
