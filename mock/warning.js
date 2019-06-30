@@ -1,10 +1,29 @@
 const faker = require("faker");
 const _ = require("lodash");
 
-const { WarningTypes, Tires } = require("./utils/constants");
+const alerts = require("./alert");
+
+const {
+  WarningTypes,
+  Tires,
+  HandleStatus,
+  HandleMethod,
+} = require("./utils/constants");
 
 const fakeWarningData = type => {
   switch (type) {
+    case "ALERT_EXCEPTION":
+      const data = faker.random.arrayElement(alerts);
+      return {
+        alertLevel: data.level,
+        alertCode: data.code,
+        alertName: data.name,
+        status: faker.random.arrayElement(HandleStatus), // 处理状态
+        method: faker.random.arrayElement(HandleMethod), // 处理方式
+        handlePerson: faker.random.arrayElement(["小王", "小李", "小张"]), // 处理人
+        handleAt: faker.date.past(), // 处理时间
+        handleId: faker.random.number(), // 处理时间
+      };
     case "BATTERY_EXCEPTION":
       return {
         temperature: faker.random.number({ min: 10, max: 100 }),
@@ -32,8 +51,7 @@ const generate = (count = 100, vehicles = []) => {
     const type = faker.random.arrayElement(Object.keys(WarningTypes));
     const name = faker.random.arrayElement(WarningTypes[type]);
     const data = fakeWarningData(type);
-
-    return {
+    let tmp = {
       id: faker.random.uuid(),
       createdAt: faker.date.past(), // 创建时间
       updatedAt: faker.date.past(), // 更新时间
@@ -46,7 +64,6 @@ const generate = (count = 100, vehicles = []) => {
       type, // 预警类型
       plate: vehicle.plate, // 车牌号
       ns: vehicle.ns, // 命名空间
-      data,
       vehicle: vehicle.id, // 车辆车架号
       vehicleModel: vehicle.model, // 车型
       vehicleBriefModel: vehicle.modelBrief, // 车型简称
@@ -56,6 +73,14 @@ const generate = (count = 100, vehicles = []) => {
       vehicleYearsFromPlate: vehicle.lifeYear, // 车辆使用年限
       vehicleMileage: faker.random.number({ min: 10000, max: 100000 }), // 车辆里程
     };
+
+    if (type === "ALERT_EXCEPTION") {
+      tmp = Object.assign({}, tmp, data);
+    } else {
+      tmp.data = data;
+    }
+
+    return tmp;
   });
 };
 
