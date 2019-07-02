@@ -67,7 +67,7 @@ const mock = ({ warningCount = 1000, vehicles = require("./vehicle") }) => ({
    * mock data
    */
   db: {
-    alerts,
+    alerts: alerts(warningCount, vehicles),
     faults,
     warnings: warnings(warningCount, vehicles),
     statisticsAlert,
