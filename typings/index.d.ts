@@ -10,6 +10,7 @@ declare class SDK {
   alert: SDK.AlertAPI;
   fault: SDK.FaultAPI;
   warning: SDK.WarningAPI;
+  summary: SDK.SummaryAPI;
   statistics: SDK.StatisticsAPI;
 }
 
@@ -53,6 +54,12 @@ declare namespace SDK {
      */
     listWarnings(req: ListWarningsRequest): Promise<ListWarningsResponse>;
   }
+  export interface SummaryAPI {
+    /**
+     * Get alerts summary
+     */
+    getAlertSummary(req: GetAlertSummaryRequest): Promise<GetAlertSummaryResponse>;
+  }
   export interface StatisticsAPI {
     /**
      * Get statistics of alert
@@ -83,6 +90,7 @@ declare namespace SDK {
         vehicleLine?: string;
         vehicleProducer?: string;
         vehicleModel?: string;
+        vehicleModelBrief?: string;
         level?: number;
         startedAt: {
           $gt?: string;
@@ -190,6 +198,10 @@ declare namespace SDK {
     headers: {
       xTotalCount: string;
     };
+  };
+
+  type GetAlertSummaryResponse = {
+    body: Array<AlertSummary>;
   };
 
   type GetAlertStatsRequest = {
@@ -307,6 +319,7 @@ declare namespace SDK {
     vehicleLine: string;
     vehicleProducer: string;
     vehicleModel: string;
+    vehicleModelBrief: string;
   };
 
   type AlertStats = {
@@ -326,6 +339,11 @@ declare namespace SDK {
     vehicleYearsFromPlate: Number;
     count: number;
     times: number;
+  };
+
+  type AlertSummary = {
+    level: Number;
+    count: Number;
   };
 
   type Fault = {
