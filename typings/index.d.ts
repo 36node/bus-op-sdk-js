@@ -74,13 +74,15 @@ declare namespace SDK {
       filter: {
         type?: string;
         code?: string;
-        line?: string;
-        plate?: string;
-        vehicleModel?: string;
-        vehicleModelBrief?: string;
         vehicleNo: {
           $regex?: string;
         };
+        vehicleNs: {
+          $regex?: string;
+        };
+        vehicleLine?: string;
+        vehicleProducer?: string;
+        vehicleModel?: string;
         level?: number;
         startedAt: {
           $gt?: string;
@@ -93,17 +95,6 @@ declare namespace SDK {
         state?: string;
         name: {
           $regex?: string;
-        };
-        ns: {
-          $regex?: string;
-        };
-        vehicleYearsFromPlate: {
-          $gt?: number;
-          $lt?: number;
-        };
-        vehicleMileage: {
-          $gt?: number;
-          $lt?: number;
         };
       };
     };
@@ -302,22 +293,20 @@ declare namespace SDK {
     updatedAt: string;
     deleted: boolean;
     deletedAt: string;
-    ns: Array<string>;
     startedAt: string;
     lastAt: string;
     code: string;
     count: number;
     level: number;
-    line: string;
     name: string;
-    plate: string;
     state: string;
     vehicle: string;
-    vehicleModel: string;
-    vehicleModelBrief: string;
+    vehiclePlate: string;
     vehicleNo: string;
-    vehicleMileage: Number;
-    vehicleYearsFromPlate: Number;
+    vehicleNs: string;
+    vehicleLine: string;
+    vehicleProducer: string;
+    vehicleModel: string;
   };
 
   type AlertStats = {
