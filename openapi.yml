@@ -1,0 +1,1140 @@
+openapi: "3.0.0"
+info:
+  version: 0.1.0
+  title: Petstore Service
+  license:
+    name: MIT
+servers:
+  - url: https://api.36node.com{basePath}
+    description: The production API server
+    variables:
+      basePath:
+        default: /petstore/v0
+paths:
+  /alerts:
+    get:
+      summary: List all alerts
+      operationId: listAlerts
+      tags:
+        - alert
+      parameters:
+        - name: _limit
+          in: query
+          description: How many items to return at one time
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: _offset
+          in: query
+          description: How many items to escape
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: _sort
+          in: query
+          description: Fields to sort
+          required: false
+          schema:
+            type: string
+        - name: _select
+          in: query
+          description: Specifies which document fields to include or exclude
+          required: false
+          schema:
+            type: integer
+        - name: type
+          in: query
+          description: 根据报警类型查询报警
+          required: false
+          schema:
+            type: string
+        - name: code
+          in: query
+          description: 根据故障码查询报警
+          required: false
+          schema:
+            type: string
+        - name: line
+          in: query
+          description: 根据线路查询报警
+          required: false
+          schema:
+            type: string
+        - name: plate
+          in: query
+          description: 根据车牌号码查询报警
+          required: false
+          schema:
+            type: string
+        - name: vehicleModel
+          in: query
+          description: 根据车型查询报警
+          required: false
+          schema:
+            type: string
+        - name: vehicleModelBrief
+          in: query
+          description: 根据车型简称查询报警
+          required: false
+          schema:
+            type: string
+        - name: vehicleNo_like
+          in: query
+          description: 车辆自编号模糊查询
+          required: false
+          schema:
+            type: string
+        - name: level
+          in: query
+          description: 根据等级查询报警
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: startedAt_gt
+          in: query
+          description: 按大于警报开始时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: startedAt_lt
+          in: query
+          description: 按小于警报开始时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: lastAt_gt
+          in: query
+          description: 按大于最后警报时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: lastAt_lt
+          in: query
+          description: 按小于最后警报时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: state
+          in: query
+          description: 根据状态查询报警 ['OPEN', 'CLOSE'] 开启 关闭
+          required: false
+          schema:
+            type: string
+        - name: name_like
+          in: query
+          description: 故障名称模糊查询
+          required: false
+          schema:
+            type: string
+        - name: ns_like
+          in: query
+          required: false
+          description: 根据车辆namespace查询
+          schema:
+            type: string
+        - name: vehicleYearsFromPlate_gt
+          description: 报废年限大于
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: vehicleYearsFromPlate_lt
+          description: 报废年限小于
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: vehicleMileage_gt
+          in: query
+          description: 车辆历程大于
+          required: false
+          schema:
+            type: number
+        - name: vehicleMileage_lt
+          in: query
+          description: 车辆历程小于
+          required: false
+          schema:
+            type: number
+      responses:
+        "200":
+          description: A paged array of alerts
+          headers:
+            X-Total-Count:
+              description: Total count of all alerts match the query
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alert"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      summary: Create an alert
+      operationId: createAlert
+      tags:
+        - alert
+      requestBody:
+        description: Alert to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Alert"
+      responses:
+        "201":
+          description: The Alert created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /alerts/{alertId}:
+    get:
+      summary: Get alert by id
+      operationId: getAlert
+      tags:
+        - alert
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          description: The id of alert
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The alert with given id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    put:
+      summary: Update alert
+      operationId: updateAlert
+      tags:
+        - alert
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          description: The id of alert
+          schema:
+            type: string
+      requestBody:
+        description: Alert to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlertUpdateBody"
+      responses:
+        "200":
+          description: The alert
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    delete:
+      summary: 删除指定报警
+      operationId: deleteAlert
+      tags:
+        - alert
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          description: The id of alert
+          schema:
+            type: string
+      responses:
+        "204":
+          description: alert deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /faults:
+    get:
+      summary: 返回故障编码列表
+      operationId: listFaults
+      tags:
+        - fault
+      responses:
+        "200":
+          description: A paged array of faults
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Fault"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /warnings:
+    get:
+      summary: List all warnings
+      operationId: listWarnings
+      tags:
+        - warning
+      parameters:
+        - name: _limit
+          in: query
+          description: How many items to return at one time
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: _offset
+          in: query
+          description: How many items to jump
+          required: false
+          schema:
+            type: string
+        - name: _select
+          in: query
+          description: Specifies which document fields to include or exclude
+          required: false
+          schema:
+            type: integer
+        - name: _sort
+          in: query
+          description: Specifies which document fields to sort
+          required: false
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: 根据预警类型查询
+          required: false
+          schema:
+            type: string
+        - name: name_like
+          in: query
+          description: 根据预警名称查询
+          required: false
+          schema:
+            type: string
+        - name: lastAt_gt
+          in: query
+          description: 按大于预警发生时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: lastAt_lt
+          in: query
+          description: 按小于预警发生时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: startAt_gt
+          in: query
+          description: 按大于预警开始时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: startAt_lt
+          in: query
+          description: 按小于预警开始发生时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: line
+          in: query
+          description: 根据线路查询预警
+          required: false
+          schema:
+            type: string
+        - name: plate
+          in: query
+          description: 根据车牌号码查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicle
+          in: query
+          description: 根据车辆车架号查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicleModel_like
+          in: query
+          description: 根据车型查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicleModelBrief_like
+          in: query
+          description: 根据车型简称查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicleNo_like
+          in: query
+          description: 根据车辆自编号查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicleProducer
+          in: query
+          description: 根据车型生产商查询
+          required: false
+          schema:
+            type: string
+        - name: vehicleMileage_gt
+          in: query
+          description: 车辆历程大于
+          required: false
+          schema:
+            type: number
+        - name: vehicleMileage_lt
+          in: query
+          description: 车辆历程小于
+          required: false
+          schema:
+            type: number
+        - name: vehicleYearsFromPlate_gt
+          in: query
+          description: 报废年限大于
+          required: false
+          schema:
+            type: number
+        - name: vehicleYearsFromPlate_lt
+          in: query
+          description: 报废年限小于
+          required: false
+          schema:
+            type: number
+      responses:
+        "200":
+          description: A paged array of warnings
+          headers:
+            X-Total-Count:
+              description: Total count of all warnings match the query
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Warning"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /statistics/alert:
+    get:
+      summary: Get statistics of alert
+      operationId: getAlertStats
+      tags:
+        - statistics
+      parameters:
+        - name: _limit
+          in: query
+          description: How many items to return at one time
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: _offset
+          in: query
+          description: How many items to escape
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: _sort
+          in: query
+          description: Fields to sort
+          required: false
+          schema:
+            type: string
+        - name: _group
+          in: query
+          description: Specifies which document fields to include or exclude
+          required: false
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: 根据报警类型查询报警
+          required: false
+          schema:
+            type: string
+        - name: code
+          in: query
+          description: 根据故障码查询报警
+          required: false
+          schema:
+            type: string
+        - name: line
+          in: query
+          description: 根据线路查询报警
+          required: false
+          schema:
+            type: string
+        - name: plate
+          in: query
+          description: 根据车牌号码查询报警
+          required: false
+          schema:
+            type: string
+        - name: vehicle
+          in: query
+          description: 根据车辆车架号查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicleModel
+          in: query
+          description: 根据车型查询报警
+          required: false
+          schema:
+            type: string
+        - name: vehicleModelBrief
+          in: query
+          description: 根据车型简称查询报警
+          required: false
+          schema:
+            type: string
+        - name: vehicleNo_like
+          in: query
+          description: 车辆自编号模糊查询
+          required: false
+          schema:
+            type: string
+        - name: level
+          in: query
+          description: 根据等级查询报警
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: startedAt_gt
+          in: query
+          description: 按大于警报开始时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: startedAt_lt
+          in: query
+          description: 按小于警报开始时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: lastAt_gt
+          in: query
+          description: 按大于最后警报时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: lastAt_lt
+          in: query
+          description: 按小于最后警报时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: state
+          in: query
+          description: 根据状态查询报警 ['OPEN', 'CLOSE'] 开启 关闭
+          required: false
+          schema:
+            type: string
+        - name: name_like
+          in: query
+          description: 故障名称模糊查询
+          required: false
+          schema:
+            type: string
+        - name: ns_like
+          in: query
+          required: false
+          description: 根据车辆namespace查询
+          schema:
+            type: string
+        - name: vehicleYearsFromPlate_gt
+          description: 报废年限大于
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: vehicleYearsFromPlate_lt
+          description: 报废年限小于
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: vehicleMileage_gt
+          in: query
+          description: 车辆历程大于
+          required: false
+          schema:
+            type: number
+        - name: vehicleMileage_lt
+          in: query
+          description: 车辆历程小于
+          required: false
+          schema:
+            type: number
+      responses:
+        "200":
+          description: The alert stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlertStats"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /statistics/warning:
+    get:
+      summary: Get statistics of warning
+      operationId: getWarningStats
+      tags:
+        - statistics
+      parameters:
+        - name: _limit
+          in: query
+          description: How many items to return at one time
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: _offset
+          in: query
+          description: How many items to jump
+          required: false
+          schema:
+            type: string
+        - name: _group
+          in: query
+          description: Specifies which document fields to include or exclude
+          required: false
+          schema:
+            type: string
+        - name: _sort
+          in: query
+          description: Specifies which document fields to sort
+          required: false
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: 根据预警类型查询
+          required: false
+          schema:
+            type: string
+        - name: name_like
+          in: query
+          description: 根据预警名称查询
+          required: false
+          schema:
+            type: string
+        - name: lastAt_gt
+          in: query
+          description: 按大于预警发生时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: lastAt_lt
+          in: query
+          description: 按小于预警发生时间查询 格式ISOString 或者 时间戳（秒）
+          required: false
+          schema:
+            type: string
+        - name: line
+          in: query
+          description: 根据线路查询预警
+          required: false
+          schema:
+            type: string
+        - name: plate
+          in: query
+          description: 根据车牌号码查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicle
+          in: query
+          description: 根据车辆车架号查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicleModel
+          in: query
+          description: 根据车型查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicleModelBrief
+          in: query
+          description: 根据车型简称查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicleNo
+          in: query
+          description: 根据车辆自编号查询预警
+          required: false
+          schema:
+            type: string
+        - name: vehicleProducer
+          in: query
+          description: 根据车型生产商查询
+          required: false
+          schema:
+            type: string
+        - name: vehicleMileage_gt
+          in: query
+          description: 车辆历程大于
+          required: false
+          schema:
+            type: number
+        - name: vehicleMileage_lt
+          in: query
+          description: 车辆历程小于
+          required: false
+          schema:
+            type: number
+        - name: vehicleYearsFromPlate_gt
+          in: query
+          description: 报废年限大于
+          required: false
+          schema:
+            type: number
+        - name: vehicleYearsFromPlate_lt
+          in: query
+          description: 报废年限小于
+          required: false
+          schema:
+            type: number
+      responses:
+        "200":
+          description: The warning stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WarningStats"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+security:
+  - bearerAuth: []
+
+components:
+  responses:
+    NoContent:
+      description: The resource was deleted successfully.
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Err"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Err"
+    InternalError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Err"
+  schemas:
+    AlertUpdateBody:
+      type: object
+      properties:
+        state:
+          type: string
+          enum: ["OPEN", "CLOSE"]
+          default: "OPEN"
+          description: "状态: 开启，关闭"
+        lastAt:
+          type: string
+          format: date
+          description: "最近一次报警时间"
+        count:
+          type: integer
+          format: int32
+          description: "次数"
+
+    Alert:
+      type: object
+      required:
+        - id
+        - startedAt
+        - lastAt
+        - code
+        - level
+        - state
+        - vehicleNo
+        - ns
+      properties:
+        # 基本字段
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date
+          description: "创建时间"
+        updatedAt:
+          type: string
+          format: date
+          description: "更新时间"
+        deleted:
+          type: boolean
+          default: false
+          description: "是否已经删除"
+        deletedAt:
+          type: string
+          format: date
+          description: "删除时间"
+        ns:
+          type: array
+          description: "报警所属命名空间"
+          items:
+            type: string
+        # 业务字段
+        startedAt:
+          type: string
+          format: date
+          description: "开始报警的时间"
+        lastAt:
+          type: string
+          format: date
+          description: "最近一次报警时间"
+        code:
+          type: string
+          description: "故障码"
+        count:
+          type: integer
+          format: int32
+          description: "次数"
+        level:
+          type: integer
+          format: int32
+          description: "故障等级"
+        line:
+          type: string
+          description: "线路"
+        name:
+          type: string
+          description: "故障名称"
+        plate:
+          type: string
+          description: "车牌号"
+        state:
+          type: string
+          enum: ["OPEN", "CLOSE"]
+          default: "OPEN"
+          description: "状态: 开启，关闭"
+        vehicle:
+          type: string
+          description: "车辆车架号"
+        vehicleModel:
+          type: string
+          description: "车型"
+        vehicleModelBrief:
+          type: string
+          description: "车型简称"
+        vehicleNo:
+          type: string
+          description: "车辆自编号"
+        vehicleMileage:
+          type: Number
+          description: "车辆总里程"
+        vehilceExpiredAt:
+          type: Number
+          description: "车辆报废日期"
+
+    AlertStats:
+      type: object
+      properties:
+        id:
+          type: string
+        ## dimension
+        ns:
+          type: array
+          description: "报警所属命名空间"
+          items:
+            type: string
+        code:
+          type: string
+          description: "故障码"
+        level:
+          type: integer
+          format: int32
+          description: "故障等级"
+        line:
+          type: string
+          description: "线路"
+        name:
+          type: string
+          description: "故障名称"
+        plate:
+          type: string
+          description: "车牌号"
+        state:
+          type: string
+          enum: ["OPEN", "CLOSE"]
+          default: "OPEN"
+          description: "状态: 开启，关闭"
+        vehicle:
+          type: string
+          description: "车辆车架号"
+        vehicleModel:
+          type: string
+          description: "车型"
+        vehicleModelBrief:
+          type: string
+          description: "车型简称"
+        vehicleNo:
+          type: string
+          description: "车辆自编号"
+        vehicleMileage:
+          type: Number
+          description: "车辆总里程"
+        vehicleYearsFromPlate:
+          type: Number
+          description: "车辆使用年限"
+        ## metric
+        count:
+          type: integer
+          format: int32
+          description: 硬件上报次数
+        times:
+          type: integer
+          format: int32
+          description: 报警数量(时间槽规约)
+
+    Fault:
+      type: object
+      description: 定义故障码
+      properties:
+        name:
+          type: string
+          description: 故障名称
+        code:
+          type: integer
+          format: int32
+          description: 故障编码
+        level:
+          type: integer
+          format: int32
+          description: 故障等级
+
+    GeoLocation:
+      type: object
+      description: "位置"
+      properties:
+        lng:
+          type: number
+          format: float
+          description: "经度"
+        lat:
+          type: number
+          format: float
+          description: "纬度"
+
+    Warning:
+      required:
+        - id
+        - type
+        - vehicle
+      properties:
+        # 基本字段
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date
+          description: "创建时间"
+        updatedAt:
+          type: string
+          format: date
+          description: "更新时间"
+        deleted:
+          type: boolean
+          default: false
+          description: "是否已经删除"
+        deletedAt:
+          type: string
+          format: date
+          description: "删除时间"
+        # 业务字段
+        count:
+          type: integer
+          format: int32
+          description: "次数"
+        line:
+          type: string
+          description: "线路"
+        name:
+          type: string
+          description: "预警名称"
+        plate:
+          type: string
+          description: "车牌号"
+        lastAt:
+          type: string
+          format: date
+          description: "预警最后一次的时间"
+        startAt:
+          type: string
+          format: date
+          description: "预警开始时间"
+        type:
+          type: string
+          description: "预警类型"
+        vehicle:
+          type: string
+          description: "车辆车架号"
+        vehicleModel:
+          type: string
+          description: "车型"
+        vehicleModelBrief:
+          type: string
+          description: "车型简称"
+        vehicleNo:
+          type: string
+          description: "车辆自编号"
+        vehicleProducer:
+          type: string
+          description: "车辆生产商"
+        vehiclePlateAt:
+          type: string
+          format: date
+          description: "车辆上牌日期"
+        vehicleYearsFromPlate:
+          type: number
+          description: "车辆使用年限"
+        vehicleMileage:
+          type: number
+          description: "车辆里程"
+        data:
+          type: object
+          description: "预警数据"
+        ns:
+          type: array
+          description: "预警所属命名空间"
+          items:
+            type: string
+
+    WarningStats:
+      type: object
+      properties:
+        id:
+          type: string
+        ## dimension
+        ns:
+          type: array
+          description: "报警所属命名空间"
+          items:
+            type: string
+        line:
+          type: string
+          description: "线路"
+        name:
+          type: string
+          description: "预警名称"
+        plate:
+          type: string
+          description: "车牌号"
+        type:
+          type: string
+          description: "预警类型"
+        vehicle:
+          type: string
+          description: "车辆车架号"
+        vehicleModel:
+          type: string
+          description: "车型"
+        vehicleModelBrief:
+          type: string
+          description: "车型简称"
+        vehicleNo:
+          type: string
+          description: "车辆自编号"
+        vehicleProducer:
+          type: string
+          description: "车辆生产商"
+        vehicleYearsFromPlate:
+          type: number
+          description: "车辆使用年限"
+        vehicleMileage:
+          type: number
+          description: "车辆里程"
+        ## metric
+        count:
+          type: integer
+          format: int32
+          description: 硬件上报次数
+        times:
+          type: integer
+          format: int32
+          description: 报警数量(时间槽规约)
+
+    Err:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
