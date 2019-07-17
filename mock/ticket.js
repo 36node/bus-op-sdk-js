@@ -3,8 +3,8 @@ const faker = require("faker");
 
 const cookStages = () => [{ id: 1, name: "处理中" }, { id: 2, name: "维修中" }];
 
-const cookTickets = ({ users, alerts, vehicles, stages, count = 10 }) =>
-  _.range(count).map(val => {
+const cookTickets = ({ users, alerts, vehicles = [], stages }) =>
+  _.range(vehicles.length * 3).map(val => {
     return {
       id: faker.random.uuid(),
       createdAt: faker.date.recent(),
@@ -19,8 +19,8 @@ const cookTickets = ({ users, alerts, vehicles, stages, count = 10 }) =>
     };
   });
 
-const cookComments = ({ users, tickets, count = 30 }) =>
-  _.range(count).map(val => {
+const cookComments = ({ users, tickets = [] }) =>
+  _.range(tickets.length * 2).map(val => {
     return {
       id: faker.random.uuid(),
       ticketId: faker.random.arrayElement(tickets.map(i => i.id)),
