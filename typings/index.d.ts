@@ -11,6 +11,7 @@ declare class SDK {
   fault: SDK.FaultAPI;
   warning: SDK.WarningAPI;
   statistics: SDK.StatisticsAPI;
+  ticket: SDK.TicketAPI;
 }
 
 declare namespace SDK {
@@ -63,6 +64,40 @@ declare namespace SDK {
      */
     getWarningStats(req: GetWarningStatsRequest): Promise<GetWarningStatsResponse>;
   }
+  export interface TicketAPI {
+    /**
+     * 查看所有泳道
+     */
+    listStages(req: ListStagesRequest): Promise<ListStagesResponse>;
+    /**
+     * 创建泳道
+     */
+    createStage(req: CreateStageRequest): Promise<CreateStageResponse>;
+    /**
+     * List all tickets
+     */
+    listTickets(req: ListTicketsRequest): Promise<ListTicketsResponse>;
+    /**
+     * 创建工单/任务单
+     */
+    creatTicket(req: CreatTicketRequest): Promise<CreatTicketResponse>;
+    /**
+     * Get a ticket by id
+     */
+    getTicket(req: GetTicketRequest): Promise<GetTicketResponse>;
+    /**
+     * update ticket
+     */
+    updateTicket(req: UpdateTicketRequest): Promise<UpdateTicketResponse>;
+    /**
+     * 获取工单评论列表
+     */
+    listComments(req: ListCommentsRequest): Promise<ListCommentsResponse>;
+    /**
+     * 创建工单评论
+     */
+    createComment(req: CreateCommentRequest): Promise<CreateCommentResponse>;
+  }
 
   type ListAlertsRequest = {
     query: {
@@ -110,7 +145,7 @@ declare namespace SDK {
   };
 
   type ListAlertsResponse = {
-    body: Array<Alert>;
+    body: [Alert];
     headers: {
       xTotalCount: string;
     };
@@ -146,7 +181,7 @@ declare namespace SDK {
   };
 
   type ListFaultsResponse = {
-    body: Array<Fault>;
+    body: [Fault];
   };
 
   type ListWarningsRequest = {
@@ -195,7 +230,7 @@ declare namespace SDK {
   };
 
   type ListWarningsResponse = {
-    body: Array<Warning>;
+    body: [Warning];
     headers: {
       xTotalCount: string;
     };
@@ -290,19 +325,118 @@ declare namespace SDK {
     body: WarningStats;
   };
 
+  type ListStagesRequest = {
+    query: {
+      limit?: number;
+      offset?: string;
+    };
+  };
+
+  type ListStagesResponse = {
+    body: [Stage];
+    headers: {
+      xTotalCount: string;
+    };
+  };
+
+  type CreateStageRequest = {
+    body: Stage;
+  };
+
+  type CreateStageResponse = {
+    body: Stage;
+  };
+
+  type ListTicketsRequest = {
+    query: {
+      limit?: number;
+      offset?: string;
+      sort?: string;
+      select?: number;
+
+      filter: {
+        q?: string;
+        createdAt: {
+          $gt?: number;
+          $lt?: number;
+        };
+        updatedAt: {
+          $gt?: number;
+          $lt?: number;
+        };
+      };
+    };
+  };
+
+  type ListTicketsResponse = {
+    body: [Ticket];
+    headers: {
+      xTotalCount: string;
+    };
+  };
+
+  type CreatTicketRequest = {
+    body: TicketDoc;
+  };
+
+  type CreatTicketResponse = {
+    body: Ticket;
+  };
+
+  type GetTicketRequest = {
+    ticketId: string;
+  };
+
+  type GetTicketResponse = {
+    body: Ticket;
+  };
+
+  type UpdateTicketRequest = {
+    ticketId: string;
+    body: TicketDoc;
+  };
+
+  type UpdateTicketResponse = {
+    body: Ticket;
+  };
+
+  type ListCommentsRequest = {
+    ticketId: string;
+
+    query: {
+      limit?: number;
+      offset?: string;
+    };
+  };
+
+  type ListCommentsResponse = {
+    body: [Comment];
+    headers: {
+      xTotalCount: string;
+    };
+  };
+
+  type CreateCommentRequest = {
+    ticketId: string;
+    body: Comment;
+  };
+
+  type CreateCommentResponse = {
+    body: Comment;
+  };
+
   type AlertUpdateBody = {
-    state: string;
+    state: "OPEN" | "CLOSE";
     lastAt: string;
     count: number;
   };
-
   type Alert = {
     id: string;
     createdAt: string;
     updatedAt: string;
     deleted: boolean;
     deletedAt: string;
-    ns: Array<string>;
+    ns: [string];
     startedAt: string;
     lastAt: string;
     code: string;
@@ -311,24 +445,23 @@ declare namespace SDK {
     line: string;
     name: string;
     plate: string;
-    state: string;
+    state: "OPEN" | "CLOSE";
     vehicle: string;
     vehicleModel: string;
     vehicleModelBrief: string;
     vehicleNo: string;
     vehicleMileage: Number;
-    vehicleYearsFromPlate: Number;
+    vehilceExpiredAt: Number;
   };
-
   type AlertStats = {
     id: string;
-    ns: Array<string>;
+    ns: [string];
     code: string;
     level: number;
     line: string;
     name: string;
     plate: string;
-    state: string;
+    state: "OPEN" | "CLOSE";
     vehicle: string;
     vehicleModel: string;
     vehicleModelBrief: string;
@@ -338,18 +471,15 @@ declare namespace SDK {
     count: number;
     times: number;
   };
-
   type Fault = {
     name: string;
     code: number;
     level: number;
   };
-
   type GeoLocation = {
     lng: number;
     lat: number;
   };
-
   type Warning = {
     id: string;
     createdAt: string;
@@ -372,12 +502,11 @@ declare namespace SDK {
     vehicleYearsFromPlate: number;
     vehicleMileage: number;
     data: {};
-    ns: Array<string>;
+    ns: [string];
   };
-
   type WarningStats = {
     id: string;
-    ns: Array<string>;
+    ns: [string];
     line: string;
     name: string;
     plate: string;
@@ -392,7 +521,123 @@ declare namespace SDK {
     count: number;
     times: number;
   };
-
+  type Vehicle = {
+    id: string;
+    ns: string;
+    online: boolean;
+    repairing: boolean;
+    brands: string;
+    capacity: number;
+    num: string;
+    emission: "C1" | "C2" | "C3" | "C4" | "C5" | "C6";
+    engineNo: string;
+    expiredAt: string;
+    length: number;
+    lifeYear: number;
+    line: string;
+    model: string;
+    modelBrief: string;
+    modified: boolean;
+    photos: [string];
+    place: string;
+    plate: string;
+    plateAt: string;
+    powerBy: "FUEL" | "HYBIRD" | "DUAL-ENERGY" | "PHEV" | "E-REV" | "ELECTRIC";
+    producer: string;
+    purchasedAt: string;
+    remark: string;
+    scrapped: boolean;
+    seats: number;
+    type: string;
+  };
+  type Stage = {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    name: string;
+  };
+  type Ticket = {
+    id: string;
+    createdAt: string;
+    createdBy: string;
+    updatedAt: string;
+    updatedBy: string;
+    alerts: [string];
+    reference: string;
+    stage:
+      | string
+      | {
+          id: string;
+          createdAt: string;
+          updatedAt: string;
+          name: string;
+        };
+    vehicle:
+      | string
+      | {
+          id: string;
+          ns: string;
+          online: boolean;
+          repairing: boolean;
+          brands: string;
+          capacity: number;
+          num: string;
+          emission: "C1" | "C2" | "C3" | "C4" | "C5" | "C6";
+          engineNo: string;
+          expiredAt: string;
+          length: number;
+          lifeYear: number;
+          line: string;
+          model: string;
+          modelBrief: string;
+          modified: boolean;
+          photos: [string];
+          place: string;
+          plate: string;
+          plateAt: string;
+          powerBy: "FUEL" | "HYBIRD" | "DUAL-ENERGY" | "PHEV" | "E-REV" | "ELECTRIC";
+          producer: string;
+          purchasedAt: string;
+          remark: string;
+          scrapped: boolean;
+          seats: number;
+          type: string;
+        };
+    state: "OPEN" | "CLOSED";
+    remark: string;
+    events: [
+      {
+        id: string;
+        createdAt: string;
+        createdBy: string;
+        name: "CLOSE" | "REOPEN" | "STAGE";
+        from: string;
+        to: string;
+      }
+    ];
+  };
+  type TicketDoc = {
+    createdBy: string;
+    updatedBy: string;
+    reference: string;
+    stage: string;
+    vehicle: string;
+    remark: string;
+  };
+  type Comment = {
+    id: string;
+    createdAt: string;
+    createdBy: string;
+    content: string;
+  };
+  type TicketEvent = {
+    id: string;
+    createdAt: string;
+    createdBy: string;
+    name: "CLOSE" | "REOPEN" | "STAGE";
+    from: string;
+    to: string;
+  };
   type Err = {
     code: string;
     message: string;

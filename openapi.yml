@@ -230,7 +230,7 @@ paths:
         "500":
           $ref: "#/components/responses/InternalError"
 
-    put:
+    patch:
       summary: Update alert
       operationId: updateAlert
       tags:
@@ -763,6 +763,312 @@ paths:
         "500":
           $ref: "#/components/responses/InternalError"
 
+  /stages:
+    get:
+      summary: 查看所有泳道
+      operationId: listStages
+      tags:
+        - ticket
+      parameters:
+        - name: _limit
+          in: query
+          description: How many items to return at one time
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: _offset
+          in: query
+          description: How many items to jump
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A paged array of stages
+          headers:
+            X-Total-Count:
+              description: Total count of all stages match the query
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Stage"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      summary: 创建泳道
+      operationId: createStage
+      tags:
+        - ticket
+      requestBody:
+        description: stage to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Stage"
+      responses:
+        "200":
+          description: The stage created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stage"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /tickets:
+    get:
+      summary: List all tickets
+      operationId: listTickets
+      tags:
+        - ticket
+      parameters:
+        - name: _limit
+          in: query
+          description: How many items to return at one time
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: _offset
+          in: query
+          description: How many items to jump
+          required: false
+          schema:
+            type: string
+        - name: _select
+          in: query
+          description: Specifies which document fields to include or exclude
+          required: false
+          schema:
+            type: integer
+        - name: _sort
+          in: query
+          description: Specifies which document fields to sort
+          required: false
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: 根据车辆自编号/工单号/报警号/车架号查询
+          required: false
+          schema:
+            type: string
+        - name: createdAt_gt
+          in: query
+          description: 创建时间大于
+          required: false
+          schema:
+            type: number
+        - name: createdAt_lt
+          in: query
+          description: 创建时间小于
+          required: false
+          schema:
+            type: number
+        - name: updatedAt_gt
+          in: query
+          description: 更新时间大于
+          required: false
+          schema:
+            type: number
+        - name: updatedAt_lt
+          in: query
+          description: 更新时间小于
+          required: false
+          schema:
+            type: number
+      responses:
+        "200":
+          description: A paged array of tickets
+          headers:
+            X-Total-Count:
+              description: Total count of all tickets match the query
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ticket"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      summary: 创建工单/任务单
+      operationId: creatTicket
+      tags:
+        - ticket
+      requestBody:
+        description: ticket to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketDoc"
+      responses:
+        "200":
+          description: The ticket created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /tickets/{ticketId}:
+    get:
+      summary: Get a ticket by id
+      operationId: getTicket
+      tags:
+        - ticket
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          description: The id of ticket
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The ticket with given id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    patch:
+      summary: update ticket
+      operationId: updateTicket
+      tags:
+        - ticket
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          description: The id of ticket
+          schema:
+            type: string
+      requestBody:
+        description: ticket to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketDoc"
+      responses:
+        "200":
+          description: The ticket updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /tickets/{ticketId}/comments:
+    get:
+      summary: 获取工单评论列表
+      operationId: listComments
+      tags:
+        - ticket
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          description: The id of ticket
+          schema:
+            type: string
+        - name: _limit
+          in: query
+          description: How many items to return at one time
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: _offset
+          in: query
+          description: How many items to jump
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A paged array of ticket's comments
+          headers:
+            X-Total-Count:
+              description: Total count of all ticket comments
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      summary: 创建工单评论
+      operationId: createComment
+      tags:
+        - ticket
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          description: The id of ticket
+          schema:
+            type: string
+      requestBody:
+        description: comment to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Comment"
+      responses:
+        "200":
+          description: The ticket comment created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
 security:
   - bearerAuth: []
 
@@ -985,6 +1291,7 @@ components:
           description: "纬度"
 
     Warning:
+      type: object
       required:
         - id
         - type
@@ -1121,6 +1428,248 @@ components:
           type: integer
           format: int32
           description: 报警数量(时间槽规约)
+
+    Vehicle:
+      type: object
+      description: "车辆信息"
+      properties:
+        id:
+          type: string
+          description: 车辆vin码
+        ns:
+          type: string
+          description: "车辆所属命名空间"
+        online:
+          type: boolean
+          description: "车辆是否在线"
+        repairing:
+          type: boolean
+          description: "车辆是否维修中"
+        ## 车辆档案
+        brands:
+          type: string
+          description: "品牌"
+        capacity:
+          type: integer
+          format: int32
+          description: "额定载客人数"
+        num:
+          type: string
+          description: "车辆自编号"
+        emission:
+          type: string
+          enum: ["C1", "C2", "C3", "C4", "C5", "C6"]
+          description: "排放标准 国标1~6"
+        engineNo:
+          type: string
+          description: "发动机编号"
+        expiredAt:
+          type: string
+          format: date
+          description: "报废日期"
+        length:
+          type: number
+          format: float
+          description: "车辆长度"
+        lifeYear:
+          type: integer
+          format: int32
+          description: "使用年限"
+        line:
+          type: string
+          description: "线路"
+        model:
+          type: string
+          description: "车型"
+        modelBrief:
+          type: string
+          description: "车型简称"
+        modified:
+          type: boolean
+          description: "是否改装"
+        photos:
+          type: array
+          description: "车辆图片"
+          items:
+            type: string
+        place:
+          type: string
+          description: "停车位置"
+        plate:
+          type: string
+          description: "车牌"
+        plateAt:
+          type: string
+          format: date
+          description: "上牌日期"
+        powerBy:
+          type: string
+          enum:
+            [
+              "FUEL",
+              "HYBIRD",
+              "DUAL-ENERGY",
+              "PHEV",
+              "E-REV",
+              "ELECTRIC",
+            ]
+          description: "能源类型：燃油,混合动力,双源无轨,插电式混合,增程式混合,纯电动"
+        producer:
+          type: string
+          description: "生产商"
+        purchasedAt:
+          type: string
+          format: date
+          description: "购买日期"
+        remark:
+          type: string
+          description: "备注"
+        scrapped:
+          type: boolean
+          description: "是否报废"
+        seats:
+          type: integer
+          format: int32
+          description: "座位数"
+        type:
+          type: string
+          description: "客车类型，例如大型普通客车"
+
+    Stage:
+      type: object
+      description: "工单阶段"
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date
+          description: "创建时间"
+        updatedAt:
+          type: string
+          format: date
+          description: "更新时间"
+        name:
+          type: string
+          description: "阶段名称"
+
+    Ticket:
+      type: object
+      description: "工单/任务"
+      required:
+        - id
+      properties:
+        # 基本字段
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date
+          description: "创建时间"
+        createdBy:
+          type: string
+          description: "工单创建者"
+        updatedAt:
+          type: string
+          format: date
+          description: "更新时间"
+        updatedBy:
+          type: string
+          description: "工单更新者"
+        # 关联
+        alerts:
+          type: array
+          items:
+            type: string
+        reference:
+          type: string
+          description: "外部系统的工单id"
+        stage:
+          oneOf:
+            - type: string
+            - $ref: "#/components/schemas/Stage"
+        vehicle:
+          oneOf:
+            - type: string
+            - $ref: "#/components/schemas/Vehicle"
+        # 业务字段
+        state:
+          type: string
+          description: "工单状态"
+          enum: ["OPEN", "CLOSED"]
+        remark:
+          type: string
+          description: "备注"
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/TicketEvent"
+
+    TicketDoc:
+      type: object
+      description: "工单/任务"
+      properties:
+        createdBy:
+          type: string
+          description: "工单创建者"
+        updatedBy:
+          type: string
+          description: "工单更新者"
+        # 关联
+        reference:
+          type: string
+          description: "外部系统的工单id"
+        stage:
+          type: string
+          description: "stage id"
+        vehicle:
+          type: string
+          description: "车辆vin码"
+        # 业务字段
+        remark:
+          type: string
+          description: "备注"
+
+    Comment:
+      type: object
+      description: "评论"
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date
+          description: "创建时间"
+        createdBy:
+          type: string
+          description: "创建者"
+        content:
+          type: string
+          description: "评论内容"
+
+    TicketEvent:
+      type: object
+      description: "工单/任务-事件(系统自动创建)"
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date
+          description: "创建时间"
+        createdBy:
+          type: string
+          description: "事件创建者"
+        name:
+          type: string
+          enum: ["CLOSE", "REOPEN", "STAGE"]
+          description: "事件名称"
+        from:
+          type: string
+          description: "from stage"
+        to:
+          type: string
+          description: "to stage"
 
     Err:
       type: object

@@ -96,4 +96,66 @@ describe("## SDK bus-op", () => {
     const result = await sdk.statistics.getWarningStats();
     expect(result.body.length).toBe(1);
   });
+
+  /**
+   * ticket 相关测试
+   */
+
+  let ticket;
+
+  it("should list stages", async () => {
+    const result = await sdk.ticket.listStages();
+    expect(result.body.length).toBe(2);
+  });
+
+  it("should create ticket", async () => {
+    const ticketDoc = {
+      createdAt: Date.now(),
+      createdBy: "1111",
+      updatedAt: Date.now(),
+      alerts: [alert.id],
+      reference: "xxxxx",
+      stage: "111",
+      vehicle: { id: "111", no: "no-222" },
+      state: "OPEN",
+    };
+    const result = await sdk.ticket.creatTicket({
+      body: ticketDoc,
+    });
+    ticket = result.body;
+    expect(ticket).toMatchObject(ticketDoc);
+  });
+
+  it("should list tickets", async () => {
+    const result = await sdk.ticket.listTickets();
+    expect(result.body.length).toBeGreaterThan(1);
+  });
+
+  it("should search tickets by q", async () => {
+    const result = await sdk.ticket.listTickets({ query: { q: "no-222" } });
+    expect(result.body.length).toBeGreaterThan(0);
+  });
+
+  it("should create comment", async () => {
+    const doc = { content: "test" };
+    const result = await sdk.ticket.createComment({
+      ticketId: ticket.id,
+      body: doc,
+    });
+    expect(result.body).toMatchObject(doc);
+  });
+
+  it("should list ticket comments", async () => {
+    const result = await sdk.ticket.listComments({ ticketId: ticket.id });
+    expect(result.body.length).toBeGreaterThan(0);
+  });
+
+  it("should close ticket", async () => {
+    const result = await sdk.ticket.updateTicket({
+      ticketId: ticket.id,
+      body: { state: "CLOSE", stage: "222" },
+    });
+    expect(result.body.state).toBe("CLOSE");
+    expect(result.body.events).toHaveLength(2);
+  });
 });

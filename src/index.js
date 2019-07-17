@@ -97,7 +97,7 @@ export default class SDK {
       if (!body) throw new Error("requetBody is required for updateAlert");
 
       return fetch(`${this.base}/alerts/${alertId}`, {
-        method: "put",
+        method: "patch",
         body,
         headers: { Authorization: this.auth, ...headers },
       });
@@ -189,6 +189,144 @@ export default class SDK {
       return fetch(`${this.base}/statistics/warning`, {
         method: "get",
         query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+  };
+  /**
+   * ticket's methods
+   */
+  ticket = {
+    /**
+     * 查看所有泳道
+     *
+     * @param {ListStagesRequest} req listStages request
+     * @returns {Promise<ListStagesResponse>} A paged array of stages
+     */
+    listStages: (req = {}) => {
+      const { query, headers } = req;
+
+      return fetch(`${this.base}/stages`, {
+        method: "get",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * 创建泳道
+     *
+     * @param {CreateStageRequest} req createStage request
+     * @returns {Promise<CreateStageResponse>} The stage created
+     */
+    createStage: (req = {}) => {
+      const { headers, body } = req;
+
+      if (!body) throw new Error("requetBody is required for createStage");
+
+      return fetch(`${this.base}/stages`, {
+        method: "post",
+        body,
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * List all tickets
+     *
+     * @param {ListTicketsRequest} req listTickets request
+     * @returns {Promise<ListTicketsResponse>} A paged array of tickets
+     */
+    listTickets: (req = {}) => {
+      const { query, headers } = req;
+
+      return fetch(`${this.base}/tickets`, {
+        method: "get",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * 创建工单/任务单
+     *
+     * @param {CreatTicketRequest} req creatTicket request
+     * @returns {Promise<CreatTicketResponse>} The ticket created
+     */
+    creatTicket: (req = {}) => {
+      const { headers, body } = req;
+
+      if (!body) throw new Error("requetBody is required for creatTicket");
+
+      return fetch(`${this.base}/tickets`, {
+        method: "post",
+        body,
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * Get a ticket by id
+     *
+     * @param {GetTicketRequest} req getTicket request
+     * @returns {Promise<GetTicketResponse>} The ticket with given id
+     */
+    getTicket: (req = {}) => {
+      const { ticketId, headers } = req;
+
+      if (!ticketId) throw new Error("ticketId is required for getTicket");
+
+      return fetch(`${this.base}/tickets/${ticketId}`, {
+        method: "get",
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * update ticket
+     *
+     * @param {UpdateTicketRequest} req updateTicket request
+     * @returns {Promise<UpdateTicketResponse>} The ticket updated
+     */
+    updateTicket: (req = {}) => {
+      const { ticketId, headers, body } = req;
+
+      if (!ticketId) throw new Error("ticketId is required for updateTicket");
+      if (!body) throw new Error("requetBody is required for updateTicket");
+
+      return fetch(`${this.base}/tickets/${ticketId}`, {
+        method: "patch",
+        body,
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * 获取工单评论列表
+     *
+     * @param {ListCommentsRequest} req listComments request
+     * @returns {Promise<ListCommentsResponse>} A paged array of ticket&#x27;s comments
+     */
+    listComments: (req = {}) => {
+      const { ticketId, query, headers } = req;
+
+      if (!ticketId) throw new Error("ticketId is required for listComments");
+
+      return fetch(`${this.base}/tickets/${ticketId}/comments`, {
+        method: "get",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * 创建工单评论
+     *
+     * @param {CreateCommentRequest} req createComment request
+     * @returns {Promise<CreateCommentResponse>} The ticket comment created
+     */
+    createComment: (req = {}) => {
+      const { ticketId, headers, body } = req;
+
+      if (!ticketId) throw new Error("ticketId is required for createComment");
+      if (!body) throw new Error("requetBody is required for createComment");
+
+      return fetch(`${this.base}/tickets/${ticketId}/comments`, {
+        method: "post",
+        body,
         headers: { Authorization: this.auth, ...headers },
       });
     },
