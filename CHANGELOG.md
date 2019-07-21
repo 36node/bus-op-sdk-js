@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/36node/bus-op-sdk-js/compare/v0.2.0...v0.3.0) (2019-07-21)
+
+
+### Features
+
+* ticket mock ([1faeefe](https://github.com/36node/bus-op-sdk-js/commit/1faeefe))
+
+
+
 ## [0.2.0](https://github.com/36node/bus-op-sdk-js/compare/v0.1.3...v0.2.0) (2019-07-17)
 
 
