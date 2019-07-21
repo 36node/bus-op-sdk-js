@@ -46,7 +46,7 @@ export default class SDK {
       const { query, headers } = req;
 
       return fetch(`${this.base}/alerts`, {
-        method: "get",
+        method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
@@ -63,7 +63,7 @@ export default class SDK {
       if (!body) throw new Error("requetBody is required for createAlert");
 
       return fetch(`${this.base}/alerts`, {
-        method: "post",
+        method: "POST",
         body,
         headers: { Authorization: this.auth, ...headers },
       });
@@ -80,7 +80,7 @@ export default class SDK {
       if (!alertId) throw new Error("alertId is required for getAlert");
 
       return fetch(`${this.base}/alerts/${alertId}`, {
-        method: "get",
+        method: "GET",
         headers: { Authorization: this.auth, ...headers },
       });
     },
@@ -97,7 +97,7 @@ export default class SDK {
       if (!body) throw new Error("requetBody is required for updateAlert");
 
       return fetch(`${this.base}/alerts/${alertId}`, {
-        method: "patch",
+        method: "PATCH",
         body,
         headers: { Authorization: this.auth, ...headers },
       });
@@ -114,7 +114,7 @@ export default class SDK {
       if (!alertId) throw new Error("alertId is required for deleteAlert");
 
       return fetch(`${this.base}/alerts/${alertId}`, {
-        method: "delete",
+        method: "DELETE",
         headers: { Authorization: this.auth, ...headers },
       });
     },
@@ -133,7 +133,7 @@ export default class SDK {
       const { headers } = req;
 
       return fetch(`${this.base}/faults`, {
-        method: "get",
+        method: "GET",
         headers: { Authorization: this.auth, ...headers },
       });
     },
@@ -152,7 +152,7 @@ export default class SDK {
       const { query, headers } = req;
 
       return fetch(`${this.base}/warnings`, {
-        method: "get",
+        method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
@@ -172,7 +172,7 @@ export default class SDK {
       const { query, headers } = req;
 
       return fetch(`${this.base}/statistics/alert`, {
-        method: "get",
+        method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
@@ -187,7 +187,7 @@ export default class SDK {
       const { query, headers } = req;
 
       return fetch(`${this.base}/statistics/warning`, {
-        method: "get",
+        method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
@@ -207,7 +207,7 @@ export default class SDK {
       const { query, headers } = req;
 
       return fetch(`${this.base}/stages`, {
-        method: "get",
+        method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
@@ -224,7 +224,7 @@ export default class SDK {
       if (!body) throw new Error("requetBody is required for createStage");
 
       return fetch(`${this.base}/stages`, {
-        method: "post",
+        method: "POST",
         body,
         headers: { Authorization: this.auth, ...headers },
       });
@@ -239,7 +239,7 @@ export default class SDK {
       const { query, headers } = req;
 
       return fetch(`${this.base}/tickets`, {
-        method: "get",
+        method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
@@ -256,7 +256,7 @@ export default class SDK {
       if (!body) throw new Error("requetBody is required for creatTicket");
 
       return fetch(`${this.base}/tickets`, {
-        method: "post",
+        method: "POST",
         body,
         headers: { Authorization: this.auth, ...headers },
       });
@@ -273,59 +273,24 @@ export default class SDK {
       if (!ticketId) throw new Error("ticketId is required for getTicket");
 
       return fetch(`${this.base}/tickets/${ticketId}`, {
-        method: "get",
+        method: "GET",
         headers: { Authorization: this.auth, ...headers },
       });
     },
     /**
-     * update ticket
+     * 创建工单事件
      *
-     * @param {UpdateTicketRequest} req updateTicket request
-     * @returns {Promise<UpdateTicketResponse>} The ticket updated
+     * @param {CreateEventRequest} req createEvent request
+     * @returns {Promise<CreateEventResponse>} The ticket event created
      */
-    updateTicket: (req = {}) => {
+    createEvent: (req = {}) => {
       const { ticketId, headers, body } = req;
 
-      if (!ticketId) throw new Error("ticketId is required for updateTicket");
-      if (!body) throw new Error("requetBody is required for updateTicket");
+      if (!ticketId) throw new Error("ticketId is required for createEvent");
+      if (!body) throw new Error("requetBody is required for createEvent");
 
-      return fetch(`${this.base}/tickets/${ticketId}`, {
-        method: "patch",
-        body,
-        headers: { Authorization: this.auth, ...headers },
-      });
-    },
-    /**
-     * 获取工单评论列表
-     *
-     * @param {ListCommentsRequest} req listComments request
-     * @returns {Promise<ListCommentsResponse>} A paged array of ticket&#x27;s comments
-     */
-    listComments: (req = {}) => {
-      const { ticketId, query, headers } = req;
-
-      if (!ticketId) throw new Error("ticketId is required for listComments");
-
-      return fetch(`${this.base}/tickets/${ticketId}/comments`, {
-        method: "get",
-        query: denormalize(query),
-        headers: { Authorization: this.auth, ...headers },
-      });
-    },
-    /**
-     * 创建工单评论
-     *
-     * @param {CreateCommentRequest} req createComment request
-     * @returns {Promise<CreateCommentResponse>} The ticket comment created
-     */
-    createComment: (req = {}) => {
-      const { ticketId, headers, body } = req;
-
-      if (!ticketId) throw new Error("ticketId is required for createComment");
-      if (!body) throw new Error("requetBody is required for createComment");
-
-      return fetch(`${this.base}/tickets/${ticketId}/comments`, {
-        method: "post",
+      return fetch(`${this.base}/tickets/${ticketId}/events`, {
+        method: "POST",
         body,
         headers: { Authorization: this.auth, ...headers },
       });

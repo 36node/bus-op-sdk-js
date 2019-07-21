@@ -3,31 +3,40 @@ const faker = require("faker");
 
 const cookStages = () => [{ id: 1, name: "处理中" }, { id: 2, name: "维修中" }];
 
-const cookTickets = ({ users, alerts, vehicles = [], stages }) =>
-  _.range(vehicles.length * 3).map(val => {
-    return {
-      id: faker.random.uuid(),
-      createdAt: faker.date.recent(),
-      createdBy: faker.random.arrayElement(users.map(i => i.id)),
-      updatedAt: faker.date.recent(),
-      updatedBy: faker.random.arrayElement(users.map(i => i.id)),
-      alerts: [faker.random.arrayElement(alerts.map(i => i.id))],
-      reference: "xxxxx",
-      stage: faker.random.arrayElement(stages),
-      vehicle: faker.random.arrayElement(vehicles),
-      state: faker.random.arrayElement(["OPEN", "CLOSED"]),
-    };
-  });
+const cookTickets = ({ users, alerts = [], vehicles = [], stages }) => {
+  const closedAlerts = alerts.filter(a => a.state === "CLOSED");
 
-const cookComments = ({ users, tickets = [] }) =>
-  _.range(tickets.length * 2).map(val => {
-    return {
-      id: faker.random.uuid(),
-      ticketId: faker.random.arrayElement(tickets.map(i => i.id)),
-      createdAt: faker.date.recent(),
-      createdBy: faker.random.arrayElement(users.map(i => i.id)),
-      content: "此处填写意见",
-    };
-  });
+  return closedAlerts
+    .map(alert => {
+      const isIgnore = faker.random.boolean();
+      const createdBy = faker.random.arrayElement(users.map(i => i.id));
+      const createdAt = faker.date.recent();
 
-module.exports = { cookStages, cookTickets, cookComments };
+      if (isIgnore) {
+        alert.handleWay = "忽略报警";
+        alert.handler = createdBy;
+        alert.handleAt = createdAt;
+      } else {
+        const id = faker.random.uuid();
+        alert.handleWay = "工单";
+        alert.handler = createdBy;
+        alert.handleAt = createdAt;
+        alert.ticket = id;
+
+        return {
+          id,
+          createdAt,
+          createdBy,
+          updatedAt: faker.date.recent(),
+          alerts: [alert.id],
+          reference: "xxxxx",
+          stage: faker.random.arrayElement(stages.map(s => s.id)),
+          vehicle: faker.random.arrayElement(vehicles.map(v => v.id)),
+          state: faker.random.arrayElement(["OPEN", "CLOSED"]),
+        };
+      }
+    })
+    .filter(t => t);
+};
+
+module.exports = { cookStages, cookTickets };

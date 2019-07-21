@@ -86,17 +86,9 @@ declare namespace SDK {
      */
     getTicket(req: GetTicketRequest): Promise<GetTicketResponse>;
     /**
-     * update ticket
+     * 创建工单事件
      */
-    updateTicket(req: UpdateTicketRequest): Promise<UpdateTicketResponse>;
-    /**
-     * 获取工单评论列表
-     */
-    listComments(req: ListCommentsRequest): Promise<ListCommentsResponse>;
-    /**
-     * 创建工单评论
-     */
-    createComment(req: CreateCommentRequest): Promise<CreateCommentResponse>;
+    createEvent(req: CreateEventRequest): Promise<CreateEventResponse>;
   }
 
   type ListAlertsRequest = {
@@ -391,42 +383,17 @@ declare namespace SDK {
     body: Ticket;
   };
 
-  type UpdateTicketRequest = {
+  type CreateEventRequest = {
     ticketId: string;
-    body: TicketDoc;
+    body: TicketEvent;
   };
 
-  type UpdateTicketResponse = {
-    body: Ticket;
-  };
-
-  type ListCommentsRequest = {
-    ticketId: string;
-
-    query: {
-      limit?: number;
-      offset?: string;
-    };
-  };
-
-  type ListCommentsResponse = {
-    body: [Comment];
-    headers: {
-      xTotalCount: string;
-    };
-  };
-
-  type CreateCommentRequest = {
-    ticketId: string;
-    body: Comment;
-  };
-
-  type CreateCommentResponse = {
-    body: Comment;
+  type CreateEventResponse = {
+    body: TicketEvent;
   };
 
   type AlertUpdateBody = {
-    state: "OPEN" | "CLOSE";
+    state: "OPEN" | "CLOSED";
     lastAt: string;
     count: number;
   };
@@ -445,13 +412,17 @@ declare namespace SDK {
     line: string;
     name: string;
     plate: string;
-    state: "OPEN" | "CLOSE";
+    state: "OPEN" | "CLOSED";
     vehicle: string;
     vehicleModel: string;
     vehicleModelBrief: string;
     vehicleNo: string;
     vehicleMileage: Number;
     vehilceExpiredAt: Number;
+    ticket: string;
+    handleWay: string;
+    handler: string;
+    handleAt: string;
   };
   type AlertStats = {
     id: string;
@@ -461,7 +432,7 @@ declare namespace SDK {
     line: string;
     name: string;
     plate: string;
-    state: "OPEN" | "CLOSE";
+    state: "OPEN" | "CLOSED";
     vehicle: string;
     vehicleModel: string;
     vehicleModelBrief: string;
@@ -610,9 +581,11 @@ declare namespace SDK {
         id: string;
         createdAt: string;
         createdBy: string;
-        name: "CLOSE" | "REOPEN" | "STAGE";
+        name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT";
         from: string;
         to: string;
+        alerts: [string];
+        content: string;
       }
     ];
   };
@@ -624,19 +597,15 @@ declare namespace SDK {
     vehicle: string;
     remark: string;
   };
-  type Comment = {
-    id: string;
-    createdAt: string;
-    createdBy: string;
-    content: string;
-  };
   type TicketEvent = {
     id: string;
     createdAt: string;
     createdBy: string;
-    name: "CLOSE" | "REOPEN" | "STAGE";
+    name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT";
     from: string;
     to: string;
+    alerts: [string];
+    content: string;
   };
   type Err = {
     code: string;

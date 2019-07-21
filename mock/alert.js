@@ -10,14 +10,12 @@ const generate = (count = 100, vehicles = []) => {
     const l = faker.random.arrayElement(c.convoys);
     const f = faker.random.arrayElement(Faults);
     const v = faker.random.arrayElement(vehicles);
-    const state = faker.random.arrayElement(["OPEN", "CLOSE"]);
+    const state = faker.random.arrayElement(["OPEN", "CLOSED"]);
 
     return {
       id: faker.random.uuid(),
       createdAt: new Date(), // 创建时间
       updatedAt: new Date(), // 更新时间
-      deleted: faker.random.boolean(), // 是否已经删除
-      deletedAt: new Date(), // 删除时间
       ns: v.ns, // 报警所属命名空间
       startedAt: new Date(), // 开始报警的时间
       lastAt: new Date(), // 最近一次报警时间

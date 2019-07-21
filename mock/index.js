@@ -7,7 +7,7 @@ const cookVehicles = require("./vehicle");
 const cookWarnings = require("./warning");
 const statisticsAlert = require("./statisticsAlert");
 const statisticsWarning = require("./statisticsWarning");
-const { cookStages, cookTickets, cookComments } = require("./ticket");
+const { cookStages, cookTickets } = require("./ticket");
 
 const defaultUsers = [
   {
@@ -33,7 +33,6 @@ const mock = ({
   const warnings = cookWarnings(warningCount, vehicles);
   const stages = cookStages();
   const tickets = cookTickets({ users, alerts, vehicles, stages });
-  const comments = cookComments({ users, tickets });
 
   const myRouter = (req, res, next) => {
     if (req.path.indexOf("statistics") !== -1) {
@@ -80,35 +79,46 @@ const mock = ({
     /**
      * ticket router
      */
-    const ticketReg = /^\/tickets\/(.+)$/;
+    const ticketReg = /^\/tickets\/(.+)\/events$/;
     const match = ticketReg.exec(req.path);
-    if (match && req.method === "PATCH") {
-      const { state, stage, updatedBy } = req.body;
+    if (match && req.method === "POST") {
+      const { to, name, alerts = [] } = req.body;
       const ticket = tickets.find(t => t.id === match[1]);
+
+      switch (name) {
+        case "CLOSE":
+          ticket.state = "CLOSED";
+          ticket.updatedAt = new Date();
+          break;
+        case "REOPEN":
+          ticket.state = "OPEN";
+          ticket.updatedAt = new Date();
+          break;
+        case "STAGE":
+          ticket.stage = to;
+          ticket.updatedAt = new Date();
+          break;
+        case "BIND_ALERT":
+          ticket.alerts.push(...alerts);
+          ticket.updatedAt = new Date();
+          break;
+        default:
+          break;
+      }
+
       ticket.events = ticket.events || [];
 
-      if (stage && stage !== ticket.stage.id) {
-        ticket.events.push({
-          id: faker.random.uuid(),
-          createdAt: Date.now(),
-          createdBy: updatedBy,
-          name: "STAGE",
-          from: ticket.stage.id,
-          to: stage,
-        });
-      }
+      const newEvent = {
+        ...req.body,
+        id: faker.random.uuid(),
+        createdAt: new Date().toISOString(),
+      };
+      ticket.events.push(newEvent);
 
-      if (state && state !== ticket.state) {
-        const name = state === "OPEN" ? "REOPEN" : "CLOSE";
-        ticket.events.push({
-          id: faker.random.uuid(),
-          createdAt: Date.now(),
-          createdBy: updatedBy,
-          name: name,
-        });
-      }
+      return res.jsonp(newEvent);
     }
 
+    // ticket 的全局搜索
     if (req.path === "/tickets" && req.method === "GET") {
       const { q } = req.query;
       if (q) {
@@ -143,7 +153,7 @@ const mock = ({
       statisticsWarning,
       stages,
       tickets,
-      comments,
+      // comments,
     },
 
     /**
