@@ -3,9 +3,9 @@ import SDK from "./index";
 const sdk = new SDK({ base: "http://localhost:3000" });
 
 describe("## SDK bus-op", () => {
-  it("should list alets", async () => {
+  it("should list alerts", async () => {
     const result = await sdk.alert.listAlerts();
-    expect(result.body.length).toBe(100);
+    expect(result.body.length).toBeGreaterThan(0);
   });
 
   let alert;
@@ -127,10 +127,5 @@ describe("## SDK bus-op", () => {
   it("should list tickets", async () => {
     const result = await sdk.ticket.listTickets();
     expect(result.body.length).toBeGreaterThan(1);
-  });
-
-  it("should search tickets by q", async () => {
-    const result = await sdk.ticket.listTickets({ query: { q: "no-222" } });
-    expect(result.body.length).toBeGreaterThan(0);
   });
 });
