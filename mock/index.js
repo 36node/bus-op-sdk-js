@@ -29,7 +29,7 @@ const mock = ({
   warningCount = 1000,
   vehicles = cookVehicles({ count: 2 }),
 }) => {
-  const alerts = cookAlerts(warningCount, vehicles);
+  const alerts = cookAlerts(vehicles);
   const warnings = cookWarnings(warningCount, vehicles);
   const stages = cookStages();
   const tickets = cookTickets({ users, alerts, vehicles, stages });
@@ -79,28 +79,46 @@ const mock = ({
     /**
      * ticket router
      */
-    const ticketReg = /^\/tickets\/(.+)\/events$/;
-    const match = ticketReg.exec(req.path);
+    const ticketEventReg = /^\/tickets\/(.+)\/events$/;
+    const match = ticketEventReg.exec(req.path);
     if (match && req.method === "POST") {
-      const { to, name, alerts = [] } = req.body;
+      const { to, name, alerts: bindAlerts = [], createdBy } = req.body;
       const ticket = tickets.find(t => t.id === match[1]);
 
       switch (name) {
         case "CLOSE":
           ticket.state = "CLOSED";
-          ticket.updatedAt = new Date();
+          ticket.updatedAt = new Date().toISOString();
           break;
         case "REOPEN":
           ticket.state = "OPEN";
-          ticket.updatedAt = new Date();
+          ticket.updatedAt = new Date().toISOString();
           break;
         case "STAGE":
           ticket.stage = to;
-          ticket.updatedAt = new Date();
+
+          const closeStage = stages.find(s => s.name === "已关闭");
+
+          if (to === closeStage.id) {
+            ticket.state = "CLOSE";
+          }
+
+          ticket.updatedAt = new Date().toISOString();
           break;
         case "BIND_ALERT":
-          ticket.alerts.push(...alerts);
-          ticket.updatedAt = new Date();
+          ticket.alerts.push(...bindAlerts);
+          ticket.updatedAt = new Date().toISOString();
+
+          // 更新报警
+          alerts.forEach(a => {
+            if (bindAlerts.includes(a.id)) {
+              a.state = "CLOSED";
+              a.handleWay = "工单";
+              a.handler = createdBy;
+              a.handleAt = new Date().toISOString();
+              a.ticket = ticket.id;
+            }
+          });
           break;
         default:
           break;
@@ -118,16 +136,66 @@ const mock = ({
       return res.jsonp(newEvent);
     }
 
+    // 新建ticket, 设置默认stage
+    if (req.path === "/tickets" && req.method === "POST") {
+      const {
+        events = [],
+        alerts: createAlerts = [],
+        createdBy,
+        ...rest
+      } = req.body;
+
+      const newTicket = {
+        id: faker.random.uuid(),
+        ...rest,
+        alerts: createAlerts,
+        createdBy,
+        stage: stages[0].id,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+
+        events: [
+          ...events.map(e => ({
+            ...e,
+            id: faker.random.uuid(),
+            createdAt: new Date().toISOString(),
+          })),
+          {
+            id: faker.random.uuid(),
+            name: "CREATE",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            alerts: req.body.alerts,
+            createdBy,
+          },
+        ],
+      };
+
+      alerts.forEach(a => {
+        if (createAlerts.includes(a.id)) {
+          a.state = "CLOSED";
+          a.handleWay = "工单";
+          a.handler = createdBy;
+          a.handleAt = new Date().toISOString();
+          a.ticket = newTicket.id;
+        }
+      });
+
+      tickets.push(newTicket);
+
+      return res.jsonp(newTicket);
+    }
+
     // ticket 的全局搜索
     if (req.path === "/tickets" && req.method === "GET") {
       const { q } = req.query;
       if (q) {
         const ts = tickets.filter(
           t =>
-            t.id === q ||
-            t.vehicle.id === q ||
-            t.vehicle.no === q ||
-            t.alerts.includes(q)
+            t.id.slice(-8) === q ||
+            t.vehicle === q ||
+            t.vehicleNo === q ||
+            t.alerts.map(a => a.slice(-8)).includes(q)
         );
         return res.jsonp(ts);
       }

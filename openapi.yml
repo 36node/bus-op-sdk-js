@@ -160,6 +160,14 @@ paths:
           required: false
           schema:
             type: number
+        - name: id
+          in: query
+          description: id 列表
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         "200":
           description: A paged array of alerts
@@ -888,6 +896,18 @@ paths:
           required: false
           schema:
             type: number
+        - name: vehicle
+          in: query
+          description: 根据车辆查询
+          required: false
+          schema:
+            type: string
+        - name: state
+          in: query
+          description: 根据工单状态查询
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: A paged array of tickets
@@ -1529,6 +1549,9 @@ components:
           oneOf:
             - type: string
             - $ref: "#/components/schemas/Vehicle"
+        vehicleNo:
+          type: string
+          description: "车辆自编号"
         # 业务字段
         state:
           type: string
@@ -1562,6 +1585,16 @@ components:
         vehicle:
           type: string
           description: "车辆vin码"
+        vehicleNo:
+          type: string
+          description: "车辆自编号"
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/TicketEvent"
+        ns:
+          type: string
+          description: "工单所属ns"
         # 业务字段
         remark:
           type: string
@@ -1583,7 +1616,7 @@ components:
           description: "事件创建者"
         name:
           type: string
-          enum: ["CLOSE", "REOPEN", "STAGE", "COMMENT", "BIND_ALERT"]
+          enum: ["CLOSE", "REOPEN", "STAGE", "COMMENT", "BIND_ALERT", "CREATE"]
           description: "事件名称"
         from:
           type: string

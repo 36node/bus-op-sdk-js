@@ -132,6 +132,7 @@ declare namespace SDK {
           $gt?: number;
           $lt?: number;
         };
+        id?: [string];
       };
     };
   };
@@ -356,6 +357,8 @@ declare namespace SDK {
           $gt?: number;
           $lt?: number;
         };
+        vehicle?: string;
+        state?: string;
       };
     };
   };
@@ -574,6 +577,7 @@ declare namespace SDK {
           seats: number;
           type: string;
         };
+    vehicleNo: string;
     state: "OPEN" | "CLOSED";
     remark: string;
     events: [
@@ -581,7 +585,7 @@ declare namespace SDK {
         id: string;
         createdAt: string;
         createdBy: string;
-        name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT";
+        name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT" | "CREATE";
         from: string;
         to: string;
         alerts: [string];
@@ -595,13 +599,27 @@ declare namespace SDK {
     reference: string;
     stage: string;
     vehicle: string;
+    vehicleNo: string;
+    events: [
+      {
+        id: string;
+        createdAt: string;
+        createdBy: string;
+        name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT" | "CREATE";
+        from: string;
+        to: string;
+        alerts: [string];
+        content: string;
+      }
+    ];
+    ns: string;
     remark: string;
   };
   type TicketEvent = {
     id: string;
     createdAt: string;
     createdBy: string;
-    name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT";
+    name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT" | "CREATE";
     from: string;
     to: string;
     alerts: [string];

@@ -105,17 +105,14 @@ describe("## SDK bus-op", () => {
 
   it("should list stages", async () => {
     const result = await sdk.ticket.listStages();
-    expect(result.body.length).toBe(2);
+    expect(result.body.length).toBe(3);
   });
 
   it("should create ticket", async () => {
     const ticketDoc = {
-      createdAt: Date.now(),
       createdBy: "1111",
-      updatedAt: Date.now(),
       alerts: [alert.id],
       reference: "xxxxx",
-      stage: "111",
       vehicle: { id: "111", no: "no-222" },
       state: "OPEN",
     };
@@ -123,6 +120,7 @@ describe("## SDK bus-op", () => {
       body: ticketDoc,
     });
     ticket = result.body;
+
     expect(ticket).toMatchObject(ticketDoc);
   });
 
