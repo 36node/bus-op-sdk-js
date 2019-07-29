@@ -159,6 +159,25 @@ export default class SDK {
     },
   };
   /**
+   * summary's methods
+   */
+  summary = {
+    /**
+     * Get alerts summary
+     *
+     * @param {GetAlertSummaryRequest} req getAlertSummary request
+     * @returns {Promise<GetAlertSummaryResponse>} The alert summary
+     */
+    getAlertSummary: (req = {}) => {
+      const { headers } = req;
+
+      return fetch(`${this.base}/summary/alerts`, {
+        method: "GET",
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+  };
+  /**
    * statistics's methods
    */
   statistics = {

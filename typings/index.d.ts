@@ -10,6 +10,7 @@ declare class SDK {
   alert: SDK.AlertAPI;
   fault: SDK.FaultAPI;
   warning: SDK.WarningAPI;
+  summary: SDK.SummaryAPI;
   statistics: SDK.StatisticsAPI;
   ticket: SDK.TicketAPI;
 }
@@ -53,6 +54,12 @@ declare namespace SDK {
      * List all warnings
      */
     listWarnings(req: ListWarningsRequest): Promise<ListWarningsResponse>;
+  }
+  export interface SummaryAPI {
+    /**
+     * Get alerts summary
+     */
+    getAlertSummary(req: GetAlertSummaryRequest): Promise<GetAlertSummaryResponse>;
   }
   export interface StatisticsAPI {
     /**
@@ -101,13 +108,16 @@ declare namespace SDK {
       filter: {
         type?: string;
         code?: string;
-        line?: string;
-        plate?: string;
-        vehicleModel?: string;
-        vehicleModelBrief?: string;
         vehicleNo: {
           $regex?: string;
         };
+        vehicleNs: {
+          $regex?: string;
+        };
+        vehicleLine?: string;
+        vehicleProducer?: string;
+        vehicleModel?: string;
+        vehicleModelBrief?: string;
         level?: number;
         startedAt: {
           $gt?: string;
@@ -227,6 +237,10 @@ declare namespace SDK {
     headers: {
       xTotalCount: string;
     };
+  };
+
+  type GetAlertSummaryResponse = {
+    body: [AlertSummary];
   };
 
   type GetAlertStatsRequest = {
@@ -417,11 +431,15 @@ declare namespace SDK {
     plate: string;
     state: "OPEN" | "CLOSED";
     vehicle: string;
+    vehiclePlate: string;
+    vehicleNs: string;
+    vehicleLine: string;
+    vehicleProducer: string;
     vehicleModel: string;
     vehicleModelBrief: string;
     vehicleNo: string;
-    vehicleMileage: Number;
-    vehilceExpiredAt: Number;
+    vehicleMileage: number;
+    vehilceExpiredAt: number;
     ticket: string;
     handleWay: string;
     handler: string;
@@ -440,10 +458,14 @@ declare namespace SDK {
     vehicleModel: string;
     vehicleModelBrief: string;
     vehicleNo: string;
-    vehicleMileage: Number;
-    vehicleYearsFromPlate: Number;
+    vehicleMileage: number;
+    vehicleYearsFromPlate: number;
     count: number;
     times: number;
+  };
+  type AlertSummary = {
+    level: number;
+    count: number;
   };
   type Fault = {
     name: string;
@@ -577,7 +599,6 @@ declare namespace SDK {
           seats: number;
           type: string;
         };
-    vehicleNo: string;
     state: "OPEN" | "CLOSED";
     remark: string;
     events: [

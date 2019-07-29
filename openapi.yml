@@ -57,15 +57,27 @@ paths:
           required: false
           schema:
             type: string
-        - name: line
+        - name: vehicleNo_like
+          in: query
+          description: 车辆自编号模糊查询
+          required: false
+          schema:
+            type: string
+        - name: vehicleNs_like
+          in: query
+          required: false
+          description: 根据车辆namespace查询
+          schema:
+            type: string
+        - name: vehicleLine
           in: query
           description: 根据线路查询报警
           required: false
           schema:
             type: string
-        - name: plate
+        - name: vehicleProducer
           in: query
-          description: 根据车牌号码查询报警
+          description: 根据车辆厂商查询报警
           required: false
           schema:
             type: string
@@ -465,6 +477,29 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "500":
           $ref: "#/components/responses/InternalError"
+
+  /summary/alerts:
+    get:
+      summary: Get alerts summary
+      operationId: getAlertSummary
+      tags:
+        - summary
+      responses:
+        "200":
+          description: The alert summary
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AlertSummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
 
   /statistics/alert:
     get:
@@ -978,7 +1013,7 @@ paths:
         "500":
           $ref: "#/components/responses/InternalError"
 
-  
+
   /tickets/{ticketId}/events:
     post:
       summary: 创建工单事件
@@ -1088,12 +1123,12 @@ components:
           type: string
           format: date
           description: "删除时间"
+        # 业务字段
         ns:
           type: array
           description: "报警所属命名空间"
           items:
             type: string
-        # 业务字段
         startedAt:
           type: string
           format: date
@@ -1130,6 +1165,18 @@ components:
         vehicle:
           type: string
           description: "车辆车架号"
+        vehiclePlate:
+          type: string
+          description: "车辆车牌号"
+        vehicleNs:
+          type: string
+          description: "车辆部门"
+        vehicleLine:
+          type: string
+          description: "车辆线路"
+        vehicleProducer:
+          type: string
+          description: "车辆厂商"
         vehicleModel:
           type: string
           description: "车型"
@@ -1140,10 +1187,10 @@ components:
           type: string
           description: "车辆自编号"
         vehicleMileage:
-          type: Number
+          type: integer
           description: "车辆总里程"
         vehilceExpiredAt:
-          type: Number
+          type: integer
           description: "车辆报废日期"
         ticket:
           type: string
@@ -1203,10 +1250,10 @@ components:
           type: string
           description: "车辆自编号"
         vehicleMileage:
-          type: Number
+          type: integer
           description: "车辆总里程"
         vehicleYearsFromPlate:
-          type: Number
+          type: integer
           description: "车辆使用年限"
         ## metric
         count:
@@ -1217,6 +1264,17 @@ components:
           type: integer
           format: int32
           description: 报警数量(时间槽规约)
+
+    AlertSummary:
+      type: object
+      description: alert summary
+      properties:
+        level:
+          type: integer
+          description: 报警等级
+        count:
+          type: integer
+          description: 报警数量
 
     Fault:
       type: object
@@ -1549,9 +1607,6 @@ components:
           oneOf:
             - type: string
             - $ref: "#/components/schemas/Vehicle"
-        vehicleNo:
-          type: string
-          description: "车辆自编号"
         # 业务字段
         state:
           type: string
