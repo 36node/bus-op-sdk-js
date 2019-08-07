@@ -63,7 +63,7 @@ paths:
           required: false
           schema:
             type: string
-        - name: vehicleNs_like
+        - name: ns_like
           in: query
           required: false
           description: 根据车辆namespace查询
@@ -90,12 +90,6 @@ paths:
         - name: vehicleModelBrief
           in: query
           description: 根据车型简称查询报警
-          required: false
-          schema:
-            type: string
-        - name: vehicleNo_like
-          in: query
-          description: 车辆自编号模糊查询
           required: false
           schema:
             type: string
@@ -142,44 +136,6 @@ paths:
           required: false
           schema:
             type: string
-        - name: ns_like
-          in: query
-          required: false
-          description: 根据车辆namespace查询
-          schema:
-            type: string
-        - name: vehicleYearsFromPlate_gt
-          description: 报废年限大于
-          in: query
-          required: false
-          schema:
-            type: number
-        - name: vehicleYearsFromPlate_lt
-          description: 报废年限小于
-          in: query
-          required: false
-          schema:
-            type: number
-        - name: vehicleMileage_gt
-          in: query
-          description: 车辆历程大于
-          required: false
-          schema:
-            type: number
-        - name: vehicleMileage_lt
-          in: query
-          description: 车辆历程小于
-          required: false
-          schema:
-            type: number
-        - name: id
-          in: query
-          description: id 列表
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
       responses:
         "200":
           description: A paged array of alerts
@@ -399,7 +355,7 @@ paths:
           required: false
           schema:
             type: string
-        - name: plate
+        - name: vehiclePlate
           in: query
           description: 根据车牌号码查询预警
           required: false
@@ -484,6 +440,13 @@ paths:
       operationId: getAlertSummary
       tags:
         - summary
+      parameters:
+        - name: type
+          in: query
+          description: Type of alerts
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: The alert summary
@@ -553,7 +516,7 @@ paths:
           required: false
           schema:
             type: string
-        - name: plate
+        - name: vehiclePlate
           in: query
           description: 根据车牌号码查询报警
           required: false
@@ -732,7 +695,7 @@ paths:
           required: false
           schema:
             type: string
-        - name: plate
+        - name: vehiclePlate
           in: query
           description: 根据车牌号码查询预警
           required: false
@@ -931,18 +894,6 @@ paths:
           required: false
           schema:
             type: number
-        - name: vehicle
-          in: query
-          description: 根据车辆查询
-          required: false
-          schema:
-            type: string
-        - name: state
-          in: query
-          description: 根据工单状态查询
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: A paged array of tickets
@@ -1101,8 +1052,6 @@ components:
         - code
         - level
         - state
-        - vehicleNo
-        - ns
       properties:
         # 基本字段
         id:
@@ -1124,11 +1073,6 @@ components:
           format: date
           description: "删除时间"
         # 业务字段
-        ns:
-          type: array
-          description: "报警所属命名空间"
-          items:
-            type: string
         startedAt:
           type: string
           format: date
@@ -1148,15 +1092,9 @@ components:
           type: integer
           format: int32
           description: "故障等级"
-        line:
-          type: string
-          description: "线路"
         name:
           type: string
           description: "故障名称"
-        plate:
-          type: string
-          description: "车牌号"
         state:
           type: string
           enum: ["OPEN", "CLOSED"]
@@ -1168,7 +1106,7 @@ components:
         vehiclePlate:
           type: string
           description: "车辆车牌号"
-        vehicleNs:
+        ns:
           type: string
           description: "车辆部门"
         vehicleLine:
@@ -1183,14 +1121,11 @@ components:
         vehicleModelBrief:
           type: string
           description: "车型简称"
-        vehicleNo:
-          type: string
-          description: "车辆自编号"
         vehicleMileage:
-          type: integer
+          type: number
           description: "车辆总里程"
         vehilceExpiredAt:
-          type: integer
+          type: number
           description: "车辆报废日期"
         ticket:
           type: string
@@ -1229,7 +1164,7 @@ components:
         name:
           type: string
           description: "故障名称"
-        plate:
+        vehiclePlate:
           type: string
           description: "车牌号"
         state:
@@ -1250,10 +1185,10 @@ components:
           type: string
           description: "车辆自编号"
         vehicleMileage:
-          type: integer
+          type: number
           description: "车辆总里程"
         vehicleYearsFromPlate:
-          type: integer
+          type: number
           description: "车辆使用年限"
         ## metric
         count:
@@ -1270,10 +1205,10 @@ components:
       description: alert summary
       properties:
         level:
-          type: integer
+          type: number
           description: 报警等级
         count:
-          type: integer
+          type: number
           description: 报警数量
 
     Fault:
@@ -1342,7 +1277,7 @@ components:
         name:
           type: string
           description: "预警名称"
-        plate:
+        vehiclePlate:
           type: string
           description: "车牌号"
         lastAt:
@@ -1407,7 +1342,7 @@ components:
         name:
           type: string
           description: "预警名称"
-        plate:
+        vehiclePlate:
           type: string
           description: "车牌号"
         type:
@@ -1510,10 +1445,10 @@ components:
         place:
           type: string
           description: "停车位置"
-        plate:
+        vehiclePlate:
           type: string
           description: "车牌"
-        plateAt:
+        vehiclePlateAt:
           type: string
           format: date
           description: "上牌日期"
@@ -1640,16 +1575,6 @@ components:
         vehicle:
           type: string
           description: "车辆vin码"
-        vehicleNo:
-          type: string
-          description: "车辆自编号"
-        events:
-          type: array
-          items:
-            $ref: "#/components/schemas/TicketEvent"
-        ns:
-          type: string
-          description: "工单所属ns"
         # 业务字段
         remark:
           type: string
@@ -1671,7 +1596,7 @@ components:
           description: "事件创建者"
         name:
           type: string
-          enum: ["CLOSE", "REOPEN", "STAGE", "COMMENT", "BIND_ALERT", "CREATE"]
+          enum: ["CLOSE", "REOPEN", "STAGE", "COMMENT", "BIND_ALERT"]
           description: "事件名称"
         from:
           type: string

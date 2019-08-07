@@ -169,10 +169,11 @@ export default class SDK {
      * @returns {Promise<GetAlertSummaryResponse>} The alert summary
      */
     getAlertSummary: (req = {}) => {
-      const { headers } = req;
+      const { query, headers } = req;
 
       return fetch(`${this.base}/summary/alerts`, {
         method: "GET",
+        query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
     },

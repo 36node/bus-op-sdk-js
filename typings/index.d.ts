@@ -111,7 +111,7 @@ declare namespace SDK {
         vehicleNo: {
           $regex?: string;
         };
-        vehicleNs: {
+        ns: {
           $regex?: string;
         };
         vehicleLine?: string;
@@ -131,18 +131,6 @@ declare namespace SDK {
         name: {
           $regex?: string;
         };
-        ns: {
-          $regex?: string;
-        };
-        vehicleYearsFromPlate: {
-          $gt?: number;
-          $lt?: number;
-        };
-        vehicleMileage: {
-          $gt?: number;
-          $lt?: number;
-        };
-        id?: [string];
       };
     };
   };
@@ -208,7 +196,7 @@ declare namespace SDK {
           $lt?: string;
         };
         line?: string;
-        plate?: string;
+        vehiclePlate?: string;
         vehicle?: string;
         vehicleModel: {
           $regex?: string;
@@ -239,6 +227,14 @@ declare namespace SDK {
     };
   };
 
+  type GetAlertSummaryRequest = {
+    query: {
+      filter: {
+        type?: string;
+      };
+    };
+  };
+
   type GetAlertSummaryResponse = {
     body: [AlertSummary];
   };
@@ -254,7 +250,7 @@ declare namespace SDK {
         type?: string;
         code?: string;
         line?: string;
-        plate?: string;
+        vehiclePlate?: string;
         vehicle?: string;
         vehicleModel?: string;
         vehicleModelBrief?: string;
@@ -310,7 +306,7 @@ declare namespace SDK {
           $lt?: string;
         };
         line?: string;
-        plate?: string;
+        vehiclePlate?: string;
         vehicle?: string;
         vehicleModel?: string;
         vehicleModelBrief?: string;
@@ -371,8 +367,6 @@ declare namespace SDK {
           $gt?: number;
           $lt?: number;
         };
-        vehicle?: string;
-        state?: string;
       };
     };
   };
@@ -420,24 +414,20 @@ declare namespace SDK {
     updatedAt: string;
     deleted: boolean;
     deletedAt: string;
-    ns: [string];
     startedAt: string;
     lastAt: string;
     code: string;
     count: number;
     level: number;
-    line: string;
     name: string;
-    plate: string;
     state: "OPEN" | "CLOSED";
     vehicle: string;
     vehiclePlate: string;
-    vehicleNs: string;
+    ns: string;
     vehicleLine: string;
     vehicleProducer: string;
     vehicleModel: string;
     vehicleModelBrief: string;
-    vehicleNo: string;
     vehicleMileage: number;
     vehilceExpiredAt: number;
     ticket: string;
@@ -452,7 +442,7 @@ declare namespace SDK {
     level: number;
     line: string;
     name: string;
-    plate: string;
+    vehiclePlate: string;
     state: "OPEN" | "CLOSED";
     vehicle: string;
     vehicleModel: string;
@@ -485,7 +475,7 @@ declare namespace SDK {
     count: number;
     line: string;
     name: string;
-    plate: string;
+    vehiclePlate: string;
     lastAt: string;
     startAt: string;
     type: string;
@@ -505,7 +495,7 @@ declare namespace SDK {
     ns: [string];
     line: string;
     name: string;
-    plate: string;
+    vehiclePlate: string;
     type: string;
     vehicle: string;
     vehicleModel: string;
@@ -536,8 +526,8 @@ declare namespace SDK {
     modified: boolean;
     photos: [string];
     place: string;
-    plate: string;
-    plateAt: string;
+    vehiclePlate: string;
+    vehiclePlateAt: string;
     powerBy: "FUEL" | "HYBIRD" | "DUAL-ENERGY" | "PHEV" | "E-REV" | "ELECTRIC";
     producer: string;
     purchasedAt: string;
@@ -589,8 +579,8 @@ declare namespace SDK {
           modified: boolean;
           photos: [string];
           place: string;
-          plate: string;
-          plateAt: string;
+          vehiclePlate: string;
+          vehiclePlateAt: string;
           powerBy: "FUEL" | "HYBIRD" | "DUAL-ENERGY" | "PHEV" | "E-REV" | "ELECTRIC";
           producer: string;
           purchasedAt: string;
@@ -606,7 +596,7 @@ declare namespace SDK {
         id: string;
         createdAt: string;
         createdBy: string;
-        name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT" | "CREATE";
+        name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT";
         from: string;
         to: string;
         alerts: [string];
@@ -620,27 +610,13 @@ declare namespace SDK {
     reference: string;
     stage: string;
     vehicle: string;
-    vehicleNo: string;
-    events: [
-      {
-        id: string;
-        createdAt: string;
-        createdBy: string;
-        name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT" | "CREATE";
-        from: string;
-        to: string;
-        alerts: [string];
-        content: string;
-      }
-    ];
-    ns: string;
     remark: string;
   };
   type TicketEvent = {
     id: string;
     createdAt: string;
     createdBy: string;
-    name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT" | "CREATE";
+    name: "CLOSE" | "REOPEN" | "STAGE" | "COMMENT" | "BIND_ALERT";
     from: string;
     to: string;
     alerts: [string];
