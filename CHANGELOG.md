@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.3](https://github.com/36node/bus-op-sdk-js/compare/v0.4.2...v0.4.3) (2019-08-07)
+
+
+### Features
+
+* add query to alert summary ([351e2b6](https://github.com/36node/bus-op-sdk-js/commit/351e2b6))
+
 ### [0.4.2](https://github.com/36node/bus-op-sdk-js/compare/v0.4.1...v0.4.2) (2019-07-29)
 
 
