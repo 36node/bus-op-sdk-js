@@ -1,6 +1,6 @@
 {
   "name": "@36node/bus-op-sdk",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "bus-op SDK.",
   "repository": {
     "url": "36node/bus-op-sdk-js",
@@ -24,7 +24,7 @@
   "scripts": {
     "build": "sketch build",
     "format": "prettier --trailing-comma es5 --write 'src/**/*.js'",
-    "gen": "swagen sdk ./openapi.yml",
+    "gen": "swagen sdk ../bus-op/openapi.yml",
     "lint": "sketch lint src",
     "release": "standard-version",
     "start": "bin/json-server.js",
