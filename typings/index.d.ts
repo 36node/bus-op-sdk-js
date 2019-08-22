@@ -332,6 +332,10 @@ declare namespace SDK {
     query: {
       limit?: number;
       offset?: string;
+
+      filter: {
+        name?: string;
+      };
     };
   };
 
@@ -400,7 +404,7 @@ declare namespace SDK {
   };
 
   type CreateEventResponse = {
-    body: TicketEvent;
+    body: Ticket;
   };
 
   type AlertUpdateBody = {
@@ -541,6 +545,7 @@ declare namespace SDK {
     createdAt: string;
     updatedAt: string;
     name: string;
+    state: string;
   };
   type Ticket = {
     id: string;
@@ -557,6 +562,7 @@ declare namespace SDK {
           createdAt: string;
           updatedAt: string;
           name: string;
+          state: string;
         };
     vehicle:
       | string
@@ -610,6 +616,7 @@ declare namespace SDK {
     reference: string;
     stage: string;
     vehicle: string;
+    alerts: string;
     remark: string;
   };
   type TicketEvent = {
