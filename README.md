@@ -2,6 +2,8 @@
 
 [![version][0]][1] [![downloads][2]][3]
 
+主要负责报警处置和工单系统。
+
 ## Install
 
 ```bash
