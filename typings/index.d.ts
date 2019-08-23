@@ -435,9 +435,9 @@ declare namespace SDK {
     vehicleMileage: number;
     vehilceExpiredAt: number;
     ticket: string;
-    handleWay: string;
-    handler: string;
-    handleAt: string;
+    action: string;
+    actionBy: string;
+    actionAt: string;
   };
   type AlertStats = {
     id: string;
@@ -595,6 +595,12 @@ declare namespace SDK {
           seats: number;
           type: string;
         };
+    vehicleNo: string;
+    vehiclePlate: string;
+    vehicleLine: string;
+    vehicleProducer: string;
+    vehicleModel: string;
+    vehicleModelBrief: string;
     state: "OPEN" | "CLOSED";
     remark: string;
     events: [
@@ -617,6 +623,12 @@ declare namespace SDK {
     stage: string;
     vehicle: string;
     alerts: string;
+    vehicleNo: string;
+    vehiclePlate: string;
+    vehicleLine: string;
+    vehicleProducer: string;
+    vehicleModel: string;
+    vehicleModelBrief: string;
     remark: string;
   };
   type TicketEvent = {
