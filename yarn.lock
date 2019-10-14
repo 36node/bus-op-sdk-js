@@ -18,10 +18,10 @@
     eslint-plugin-react "7.12.4"
     eslint-plugin-react-hooks "^1.5.0"
 
-"@36node/fetch@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@36node/fetch/-/fetch-0.6.0.tgz#720aba3cd4a4d71652768a0015c6de3ecbcaed01"
-  integrity sha512-JL6CwE+/rR0mT3Ygl4FTxsIGMT8Rr/onMnyNz0ypgEfxcUWzz4R5aakyOq1RXesDUwtijj0Sys/F78LbuF0gIQ==
+"@36node/fetch@^0.6.4":
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/@36node/fetch/-/fetch-0.6.4.tgz#4ed59c3a5a1a61d808b80209c090c01aa153b7f8"
+  integrity sha512-2A2Xc9GlR3yCAlKwaS2bt9bWxVAMz9HkIT+scW7lSZ0iWOcWq2Fog+XWrW+uFkQ76WdbxH4KruKDKyrXD/TD3w==
   dependencies:
     decode-uri-component "^0.2.0"
     http-errors "^1.7.1"

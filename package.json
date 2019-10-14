@@ -19,7 +19,7 @@
   ],
   "config-overrides-path": "node_modules/@36node/sketch/config-overrides",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.m.js",
   "typings": "typings/index.d.ts",
   "scripts": {
     "build": "sketch build",
@@ -49,7 +49,7 @@
     ]
   },
   "dependencies": {
-    "@36node/fetch": "^0.6.0",
+    "@36node/fetch": "^0.6.4",
     "@36node/query-normalizr": "^0.4.6",
     "commander": "^2.20.0"
   },
