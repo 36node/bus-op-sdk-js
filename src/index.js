@@ -139,6 +139,43 @@ export default class SDK {
     },
   };
   /**
+   * exception's methods
+   */
+  exception = {
+    /**
+     * List all exceptions
+     *
+     * @param {ListExceptionsRequest} req listExceptions request
+     * @returns {Promise<ListExceptionsResponse>} A paged array of exceptions
+     */
+    listExceptions: (req = {}) => {
+      const { query, headers } = req;
+
+      return fetch(`${this.base}/exceptions`, {
+        method: "GET",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * Get exception by id
+     *
+     * @param {GetExceptionRequest} req getException request
+     * @returns {Promise<GetExceptionResponse>} The exception with given id
+     */
+    getException: (req = {}) => {
+      const { exceptionId, headers } = req;
+
+      if (!exceptionId)
+        throw new Error("exceptionId is required for getException");
+
+      return fetch(`${this.base}/exceptions/${exceptionId}`, {
+        method: "GET",
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+  };
+  /**
    * warning's methods
    */
   warning = {

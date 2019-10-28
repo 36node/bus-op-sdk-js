@@ -9,6 +9,7 @@ declare class SDK {
 
   alert: SDK.AlertAPI;
   fault: SDK.FaultAPI;
+  exception: SDK.ExceptionAPI;
   warning: SDK.WarningAPI;
   summary: SDK.SummaryAPI;
   statistics: SDK.StatisticsAPI;
@@ -48,6 +49,16 @@ declare namespace SDK {
      * 返回故障编码列表
      */
     listFaults(req: ListFaultsRequest): Promise<ListFaultsResponse>;
+  }
+  export interface ExceptionAPI {
+    /**
+     * List all exceptions
+     */
+    listExceptions(req: ListExceptionsRequest): Promise<ListExceptionsResponse>;
+    /**
+     * Get exception by id
+     */
+    getException(req: GetExceptionRequest): Promise<GetExceptionResponse>;
   }
   export interface WarningAPI {
     /**
@@ -173,6 +184,53 @@ declare namespace SDK {
 
   type ListFaultsResponse = {
     body: [Fault];
+  };
+
+  type ListExceptionsRequest = {
+    query: {
+      limit?: number;
+      offset?: number;
+      sort?: string;
+      select?: number;
+
+      filter: {
+        type?: string;
+        code?: string;
+        vehicleNo: {
+          $regex?: string;
+        };
+        ns: {
+          $regex?: string;
+        };
+        vehicleLine?: string;
+        vehicleProducer?: string;
+        vehicleModel?: string;
+        vehicleModelBrief?: string;
+        startedAt: {
+          $gt?: string;
+          $lt?: string;
+        };
+        lastAt: {
+          $gt?: string;
+          $lt?: string;
+        };
+      };
+    };
+  };
+
+  type ListExceptionsResponse = {
+    body: [Exception];
+    headers: {
+      xTotalCount: string;
+    };
+  };
+
+  type GetExceptionRequest = {
+    exceptionId: string;
+  };
+
+  type GetExceptionResponse = {
+    body: Exception;
   };
 
   type ListWarningsRequest = {
@@ -470,6 +528,27 @@ declare namespace SDK {
     lng: number;
     lat: number;
   };
+  type Exception = {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deleted: boolean;
+    deletedAt: string;
+    startedAt: string;
+    lastAt: string;
+    code: string;
+    count: number;
+    vehicle: string;
+    vehiclePlate: string;
+    ns: string;
+    vehicleLine: string;
+    vehicleProducer: string;
+    vehicleModel: string;
+    vehicleModelBrief: string;
+    vehicleMileage: number;
+    vehilceExpiredAt: number;
+    data: {};
+  };
   type Warning = {
     id: string;
     createdAt: string;
@@ -511,35 +590,6 @@ declare namespace SDK {
     count: number;
     times: number;
   };
-  type Vehicle = {
-    id: string;
-    ns: string;
-    online: boolean;
-    repairing: boolean;
-    brands: string;
-    capacity: number;
-    num: string;
-    emission: "C1" | "C2" | "C3" | "C4" | "C5" | "C6";
-    engineNo: string;
-    expiredAt: string;
-    length: number;
-    lifeYear: number;
-    line: string;
-    model: string;
-    modelBrief: string;
-    modified: boolean;
-    photos: [string];
-    place: string;
-    vehiclePlate: string;
-    vehiclePlateAt: string;
-    powerBy: "FUEL" | "HYBIRD" | "DUAL-ENERGY" | "PHEV" | "E-REV" | "ELECTRIC";
-    producer: string;
-    purchasedAt: string;
-    remark: string;
-    scrapped: boolean;
-    seats: number;
-    type: string;
-  };
   type Stage = {
     id: string;
     createdAt: string;
@@ -564,37 +614,7 @@ declare namespace SDK {
           name: string;
           state: string;
         };
-    vehicle:
-      | string
-      | {
-          id: string;
-          ns: string;
-          online: boolean;
-          repairing: boolean;
-          brands: string;
-          capacity: number;
-          num: string;
-          emission: "C1" | "C2" | "C3" | "C4" | "C5" | "C6";
-          engineNo: string;
-          expiredAt: string;
-          length: number;
-          lifeYear: number;
-          line: string;
-          model: string;
-          modelBrief: string;
-          modified: boolean;
-          photos: [string];
-          place: string;
-          vehiclePlate: string;
-          vehiclePlateAt: string;
-          powerBy: "FUEL" | "HYBIRD" | "DUAL-ENERGY" | "PHEV" | "E-REV" | "ELECTRIC";
-          producer: string;
-          purchasedAt: string;
-          remark: string;
-          scrapped: boolean;
-          seats: number;
-          type: string;
-        };
+    vehicle: string;
     vehicleNo: string;
     vehiclePlate: string;
     vehicleLine: string;
@@ -613,6 +633,7 @@ declare namespace SDK {
         to: string;
         alerts: [string];
         content: string;
+        action: string;
       }
     ];
   };
@@ -640,6 +661,7 @@ declare namespace SDK {
     to: string;
     alerts: [string];
     content: string;
+    action: string;
   };
   type Err = {
     code: string;
