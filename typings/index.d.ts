@@ -7,6 +7,7 @@ declare class SDK {
   token: string;
   auth: string;
 
+  event: SDK.EventAPI;
   alert: SDK.AlertAPI;
   fault: SDK.FaultAPI;
   exception: SDK.ExceptionAPI;
@@ -22,6 +23,12 @@ declare namespace SDK {
     token?: string;
   }
 
+  export interface EventAPI {
+    /**
+     * create event
+     */
+    createEvent(req: CreateEventRequest): Promise<CreateEventResponse>;
+  }
   export interface AlertAPI {
     /**
      * List all alerts
@@ -59,6 +66,10 @@ declare namespace SDK {
      * Get exception by id
      */
     getException(req: GetExceptionRequest): Promise<GetExceptionResponse>;
+    /**
+     * 删除指定异常
+     */
+    deleteException(req: DeleteExceptionRequest): Promise<DeleteExceptionResponse>;
   }
   export interface WarningAPI {
     /**
@@ -108,6 +119,14 @@ declare namespace SDK {
      */
     createEvent(req: CreateEventRequest): Promise<CreateEventResponse>;
   }
+
+  type CreateEventRequest = {
+    body: Event;
+  };
+
+  type CreateEventResponse = {
+    body: Event;
+  };
 
   type ListAlertsRequest = {
     query: {
@@ -195,7 +214,9 @@ declare namespace SDK {
 
       filter: {
         type?: string;
-        code?: string;
+        code: {
+          $regex?: string;
+        };
         vehicleNo: {
           $regex?: string;
         };
@@ -231,6 +252,10 @@ declare namespace SDK {
 
   type GetExceptionResponse = {
     body: Exception;
+  };
+
+  type DeleteExceptionRequest = {
+    exceptionId: string;
   };
 
   type ListWarningsRequest = {
@@ -429,6 +454,7 @@ declare namespace SDK {
           $gt?: number;
           $lt?: number;
         };
+        action?: number;
       };
     };
   };
@@ -469,6 +495,13 @@ declare namespace SDK {
     state: "OPEN" | "CLOSED";
     lastAt: string;
     count: number;
+  };
+  type Event = {
+    flag: string;
+    event: string;
+    vin: string;
+    ns: string;
+    body: {};
   };
   type Alert = {
     id: string;

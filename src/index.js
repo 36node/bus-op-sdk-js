@@ -13,9 +13,9 @@ export default class SDK {
    * @returns {string} auth header
    * */
   get auth() {
-    if (this.token) {
-      return `Bearer ${this.token}`;
-    }
+    let token = this.token;
+    if (typeof token === "function") token = token();
+    if (token) return `Bearer ${token}`;
 
     return "";
   }
@@ -32,6 +32,28 @@ export default class SDK {
     this.token = opt.token || "";
   }
 
+  /**
+   * event's methods
+   */
+  event = {
+    /**
+     * create event
+     *
+     * @param {CreateEventRequest} req createEvent request
+     * @returns {Promise<CreateEventResponse>} The snapshot created
+     */
+    createEvent: (req = {}) => {
+      const { headers, body } = req;
+
+      if (!body) throw new Error("requetBody is required for createEvent");
+
+      return fetch(`${this.base}/events`, {
+        method: "POST",
+        body,
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+  };
   /**
    * alert's methods
    */
@@ -171,6 +193,23 @@ export default class SDK {
 
       return fetch(`${this.base}/exceptions/${exceptionId}`, {
         method: "GET",
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * 删除指定异常
+     *
+     * @param {DeleteExceptionRequest} req deleteException request
+     * @returns {Promise<DeleteExceptionResponse>} exception deleted
+     */
+    deleteException: (req = {}) => {
+      const { exceptionId, headers } = req;
+
+      if (!exceptionId)
+        throw new Error("exceptionId is required for deleteException");
+
+      return fetch(`${this.base}/exceptions/${exceptionId}`, {
+        method: "DELETE",
         headers: { Authorization: this.auth, ...headers },
       });
     },

@@ -48,6 +48,14 @@
     humps "^2.0.1"
     lodash "^4.17.11"
 
+"@36node/query-normalizr@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@36node/query-normalizr/-/query-normalizr-0.4.8.tgz#481323d4d2d51f3c5fd014e975ee297c0020b856"
+  integrity sha512-hVoU5xHDtV+KaMM1hR7GHq/3TyD39sznB0KrpMqvmWsn+qdXFc4ql6tw0x98jxHGBvyWAhGjIV2KRAnZJq5u4g==
+  dependencies:
+    humps "^2.0.1"
+    lodash "^4.17.11"
+
 "@36node/sketch@^0.13.12":
   version "0.13.12"
   resolved "https://registry.yarnpkg.com/@36node/sketch/-/sketch-0.13.12.tgz#0b26b3446abe40e45f119a93fdbd60eeb46d99e1"
@@ -90,19 +98,19 @@
     tmp "^0.0.33"
     webpack-filter-warnings-plugin "^1.2.1"
 
-"@36node/swagen@^0.13.4":
-  version "0.13.4"
-  resolved "https://registry.yarnpkg.com/@36node/swagen/-/swagen-0.13.4.tgz#494fc414e4aa7c77082e24d275b79feef57a1766"
-  integrity sha512-uToyei0UUu+gP2HP6Ac2PMIbb+Mqi9QG5W0qzp53WQdL1Ggetzuejb5+zcFcrPCeRASp0oeZ4Vdu7sZJMTsv6A==
+"@36node/swagen@^0.13.8":
+  version "0.13.8"
+  resolved "https://registry.yarnpkg.com/@36node/swagen/-/swagen-0.13.8.tgz#f68563fe1c38e9f6a51653e867826c2a174cc93e"
+  integrity sha512-JrwjFQKltjpspU53m938LPPod2RHkPnQAsnw1dtPVYw6IRuRXyMw560wJua2vsIiqARqhyCkNNtF/bq6fexmvA==
   dependencies:
-    "@36node/query-normalizr" "^0.4.6"
+    "@36node/query-normalizr" "^0.4.8"
     handlebars "^4.0.12"
     handlebars-helpers "^0.10.0"
     js-yaml "^3.12.0"
     jsonfile "^5.0.0"
     lodash "^4.17.11"
     postman-collection "^3.3.0"
-    prettier "1.17.1"
+    prettier "^1.18.2"
     request "^2.88.0"
     require-directory "^2.1.1"
     swagger-parser "^6.0.1"
@@ -11346,15 +11354,15 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@1.17.1:
-  version "1.17.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.17.1.tgz#ed64b4e93e370cb8a25b9ef7fef3e4fd1c0995db"
-  integrity sha512-TzGRNvuUSmPgwivDqkZ9tM/qTGW9hqDKWOE9YHiyQdixlKbv7kvEqsmDPrcHJTKwthU774TQwZXVtaQ/mMsvjg==
-
 prettier@1.18.2:
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.18.2.tgz#6823e7c5900017b4bd3acf46fe9ac4b4d7bda9ea"
   integrity sha512-OeHeMc0JhFE9idD4ZdtNibzY0+TPHSpSSb9h8FqtP+YnoZZ1sl8Vc9b1sasjfymH3SonAF4QcA2+mzHPhMvIiw==
+
+prettier@^1.18.2:
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
+  integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
 
 pretty-bytes@^3.0.0:
   version "3.0.1"
