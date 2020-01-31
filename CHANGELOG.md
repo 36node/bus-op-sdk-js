@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.9](https://github.com/36node/bus-op-sdk-js/compare/v0.4.8...v0.4.9) (2020-01-31)
+
+
+### Bug Fixes
+
+* update op-sdk swagen ([e2154a9](https://github.com/36node/bus-op-sdk-js/commit/e2154a9))
+
 ### [0.4.8](https://github.com/36node/bus-op-sdk-js/compare/v0.4.7...v0.4.8) (2019-10-28)
 
 
