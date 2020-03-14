@@ -392,4 +392,94 @@ export default class SDK {
       });
     },
   };
+  /**
+   * template's methods
+   */
+  template = {
+    /**
+     * List all templates
+     *
+     * @param {ListTemplatesRequest} req listTemplates request
+     * @returns {Promise<ListTemplatesResponse>} A paged array of templates
+     */
+    listTemplates: (req = {}) => {
+      const { query, headers } = req;
+
+      return fetch(`${this.base}/templates`, {
+        method: "GET",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * Create an template
+     *
+     * @param {CreateTemplateRequest} req createTemplate request
+     * @returns {Promise<CreateTemplateResponse>} The Template created
+     */
+    createTemplate: (req = {}) => {
+      const { headers, body } = req;
+
+      if (!body) throw new Error("requetBody is required for createTemplate");
+
+      return fetch(`${this.base}/templates`, {
+        method: "POST",
+        body,
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * Get template by id
+     *
+     * @param {GetTemplateRequest} req getTemplate request
+     * @returns {Promise<GetTemplateResponse>} The template with given id
+     */
+    getTemplate: (req = {}) => {
+      const { templateId, headers } = req;
+
+      if (!templateId)
+        throw new Error("templateId is required for getTemplate");
+
+      return fetch(`${this.base}/template/${templateId}`, {
+        method: "GET",
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * Update template
+     *
+     * @param {UpdateTemplateRequest} req updateTemplate request
+     * @returns {Promise<UpdateTemplateResponse>} The template
+     */
+    updateTemplate: (req = {}) => {
+      const { templateId, headers, body } = req;
+
+      if (!templateId)
+        throw new Error("templateId is required for updateTemplate");
+      if (!body) throw new Error("requetBody is required for updateTemplate");
+
+      return fetch(`${this.base}/template/${templateId}`, {
+        method: "PATCH",
+        body,
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * 删除指定模板
+     *
+     * @param {DeleteTemplateRequest} req deleteTemplate request
+     * @returns {Promise<DeleteTemplateResponse>} template deleted
+     */
+    deleteTemplate: (req = {}) => {
+      const { templateId, headers } = req;
+
+      if (!templateId)
+        throw new Error("templateId is required for deleteTemplate");
+
+      return fetch(`${this.base}/template/${templateId}`, {
+        method: "DELETE",
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+  };
 }

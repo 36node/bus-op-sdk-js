@@ -15,6 +15,7 @@ declare class SDK {
   summary: SDK.SummaryAPI;
   statistics: SDK.StatisticsAPI;
   ticket: SDK.TicketAPI;
+  template: SDK.TemplateAPI;
 }
 
 declare namespace SDK {
@@ -118,6 +119,28 @@ declare namespace SDK {
      * 创建工单事件
      */
     createEvent(req: CreateEventRequest): Promise<CreateEventResponse>;
+  }
+  export interface TemplateAPI {
+    /**
+     * List all templates
+     */
+    listTemplates(req: ListTemplatesRequest): Promise<ListTemplatesResponse>;
+    /**
+     * Create an template
+     */
+    createTemplate(req: CreateTemplateRequest): Promise<CreateTemplateResponse>;
+    /**
+     * Get template by id
+     */
+    getTemplate(req: GetTemplateRequest): Promise<GetTemplateResponse>;
+    /**
+     * Update template
+     */
+    updateTemplate(req: UpdateTemplateRequest): Promise<UpdateTemplateResponse>;
+    /**
+     * 删除指定模板
+     */
+    deleteTemplate(req: DeleteTemplateRequest): Promise<DeleteTemplateResponse>;
   }
 
   type CreateEventRequest = {
@@ -491,6 +514,57 @@ declare namespace SDK {
     body: Ticket;
   };
 
+  type ListTemplatesRequest = {
+    query: {
+      limit?: number;
+      offset?: number;
+      sort?: string;
+      select?: number;
+
+      filter: {
+        content: {
+          $regex?: string;
+        };
+      };
+    };
+  };
+
+  type ListTemplatesResponse = {
+    body: [Template];
+    headers: {
+      xTotalCount: string;
+    };
+  };
+
+  type CreateTemplateRequest = {
+    body: Template;
+  };
+
+  type CreateTemplateResponse = {
+    body: Template;
+  };
+
+  type GetTemplateRequest = {
+    templateId: string;
+  };
+
+  type GetTemplateResponse = {
+    body: Template;
+  };
+
+  type UpdateTemplateRequest = {
+    templateId: string;
+    body: TemplateUpdateBody;
+  };
+
+  type UpdateTemplateResponse = {
+    body: Template;
+  };
+
+  type DeleteTemplateRequest = {
+    templateId: string;
+  };
+
   type AlertUpdateBody = {
     state: "OPEN" | "CLOSED";
     lastAt: string;
@@ -695,6 +769,17 @@ declare namespace SDK {
     alerts: [string];
     content: string;
     action: string;
+  };
+  type Template = {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deleted: boolean;
+    deletedAt: string;
+    content: string;
+  };
+  type TemplateUpdateBody = {
+    content: string;
   };
   type Err = {
     code: string;
