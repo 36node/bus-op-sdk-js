@@ -259,6 +259,23 @@ export default class SDK {
    */
   statistics = {
     /**
+     * Get statistics of tickets
+     *
+     * @param {GetTicketsStatsRequest} req getTicketsStats request
+     * @returns {Promise<GetTicketsStatsResponse>} The ticket stats
+     */
+    getTicketsStats: (req = {}) => {
+      const { query, headers } = req;
+
+      if (!query) throw new Error("query is required for statistics");
+
+      return fetch(`${this.base}/statistics/tickets`, {
+        method: "GET",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
      * Get statistics of alert
      *
      * @param {GetAlertStatsRequest} req getAlertStats request

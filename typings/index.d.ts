@@ -86,6 +86,10 @@ declare namespace SDK {
   }
   export interface StatisticsAPI {
     /**
+     * Get statistics of tickets
+     */
+    getTicketsStats(req: GetTicketsStatsRequest): Promise<GetTicketsStatsResponse>;
+    /**
      * Get statistics of alert
      */
     getAlertStats(req: GetAlertStatsRequest): Promise<GetAlertStatsResponse>;
@@ -343,6 +347,22 @@ declare namespace SDK {
 
   type GetAlertSummaryResponse = {
     body: [AlertSummary];
+  };
+
+  type GetTicketsStatsRequest = {
+    query: {
+      group: string;
+
+      filter: {
+        ns: {
+          $regex: string;
+        };
+      };
+    };
+  };
+
+  type GetTicketsStatsResponse = {
+    body: [{}];
   };
 
   type GetAlertStatsRequest = {
@@ -711,6 +731,7 @@ declare namespace SDK {
     updatedAt: string;
     updatedBy: string;
     alerts: [string];
+    alertLevel: number;
     reference: string;
     stage:
       | string
