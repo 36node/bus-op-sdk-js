@@ -351,9 +351,8 @@ declare namespace SDK {
 
   type GetTicketsStatsRequest = {
     query: {
-      group: string;
-
       filter: {
+        stage?: string;
         ns: {
           $regex: string;
         };

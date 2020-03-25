@@ -24,7 +24,7 @@
   "scripts": {
     "build": "sketch build",
     "format": "prettier --trailing-comma es5 --write 'src/**/*.js'",
-    "gen": "swagen sdk ../bus-op/openapi.yml",
+    "gen": "swagen sdk https://api.uat.bus.36node.com/op/v0/openapi.yml",
     "lint": "sketch lint src --fix",
     "release": "standard-version",
     "start": "bin/json-server.js",
