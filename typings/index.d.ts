@@ -11,8 +11,8 @@ declare class SDK {
   alert: SDK.AlertAPI;
   fault: SDK.FaultAPI;
   exception: SDK.ExceptionAPI;
-  warning: SDK.WarningAPI;
   summary: SDK.SummaryAPI;
+  warning: SDK.WarningAPI;
   statistics: SDK.StatisticsAPI;
   ticket: SDK.TicketAPI;
   template: SDK.TemplateAPI;
@@ -72,17 +72,21 @@ declare namespace SDK {
      */
     deleteException(req: DeleteExceptionRequest): Promise<DeleteExceptionResponse>;
   }
+  export interface SummaryAPI {
+    /**
+     * Get exceptions summary
+     */
+    getExceptionsSummary(req: GetExceptionsSummaryRequest): Promise<GetExceptionsSummaryResponse>;
+    /**
+     * Get alerts summary
+     */
+    getAlertSummary(req: GetAlertSummaryRequest): Promise<GetAlertSummaryResponse>;
+  }
   export interface WarningAPI {
     /**
      * List all warnings
      */
     listWarnings(req: ListWarningsRequest): Promise<ListWarningsResponse>;
-  }
-  export interface SummaryAPI {
-    /**
-     * Get alerts summary
-     */
-    getAlertSummary(req: GetAlertSummaryRequest): Promise<GetAlertSummaryResponse>;
   }
   export interface StatisticsAPI {
     /**
@@ -285,6 +289,32 @@ declare namespace SDK {
     exceptionId: string;
   };
 
+  type GetExceptionsSummaryRequest = {
+    query: {
+      group?: string;
+
+      filter: {
+        type?: string;
+      };
+    };
+  };
+
+  type GetExceptionsSummaryResponse = {
+    body: [ExceptionsSummary];
+  };
+
+  type GetAlertSummaryRequest = {
+    query: {
+      filter: {
+        type?: string;
+      };
+    };
+  };
+
+  type GetAlertSummaryResponse = {
+    body: [AlertSummary];
+  };
+
   type ListWarningsRequest = {
     query: {
       limit?: number;
@@ -335,18 +365,6 @@ declare namespace SDK {
     headers: {
       xTotalCount: string;
     };
-  };
-
-  type GetAlertSummaryRequest = {
-    query: {
-      filter: {
-        type?: string;
-      };
-    };
-  };
-
-  type GetAlertSummaryResponse = {
-    body: [AlertSummary];
   };
 
   type GetTicketsStatsRequest = {
@@ -644,6 +662,10 @@ declare namespace SDK {
   type AlertSummary = {
     level: number;
     count: number;
+  };
+  type ExceptionsSummary = {
+    key: string;
+    count: string;
   };
   type Fault = {
     name: string;

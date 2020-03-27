@@ -215,6 +215,41 @@ export default class SDK {
     },
   };
   /**
+   * summary's methods
+   */
+  summary = {
+    /**
+     * Get exceptions summary
+     *
+     * @param {GetExceptionsSummaryRequest} req getExceptionsSummary request
+     * @returns {Promise<GetExceptionsSummaryResponse>} The exceptions summary
+     */
+    getExceptionsSummary: (req = {}) => {
+      const { query, headers } = req;
+
+      return fetch(`${this.base}/summary/exceptions`, {
+        method: "GET",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * Get alerts summary
+     *
+     * @param {GetAlertSummaryRequest} req getAlertSummary request
+     * @returns {Promise<GetAlertSummaryResponse>} The alert summary
+     */
+    getAlertSummary: (req = {}) => {
+      const { query, headers } = req;
+
+      return fetch(`${this.base}/summary/alerts`, {
+        method: "GET",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+  };
+  /**
    * warning's methods
    */
   warning = {
@@ -228,26 +263,6 @@ export default class SDK {
       const { query, headers } = req;
 
       return fetch(`${this.base}/warnings`, {
-        method: "GET",
-        query: denormalize(query),
-        headers: { Authorization: this.auth, ...headers },
-      });
-    },
-  };
-  /**
-   * summary's methods
-   */
-  summary = {
-    /**
-     * Get alerts summary
-     *
-     * @param {GetAlertSummaryRequest} req getAlertSummary request
-     * @returns {Promise<GetAlertSummaryResponse>} The alert summary
-     */
-    getAlertSummary: (req = {}) => {
-      const { query, headers } = req;
-
-      return fetch(`${this.base}/summary/alerts`, {
         method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
