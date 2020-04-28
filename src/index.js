@@ -91,6 +91,23 @@ export default class SDK {
       });
     },
     /**
+     * Export alerts
+     *
+     * @param {ExportAlertsRequest} req exportAlerts request
+     * @returns {Promise<ExportAlertsResponse>} A paged array of alerts
+     */
+    exportAlerts: (req = {}) => {
+      const { headers, body } = req;
+
+      if (!body) throw new Error("requetBody is required for exportAlerts");
+
+      return fetch(`${this.base}/exports/alerts`, {
+        method: "POST",
+        body,
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
      * Get alert by id
      *
      * @param {GetAlertRequest} req getAlert request

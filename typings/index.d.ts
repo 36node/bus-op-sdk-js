@@ -40,6 +40,10 @@ declare namespace SDK {
      */
     createAlert(req: CreateAlertRequest): Promise<CreateAlertResponse>;
     /**
+     * Export alerts
+     */
+    exportAlerts(req: ExportAlertsRequest): Promise<ExportAlertsResponse>;
+    /**
      * Get alert by id
      */
     getAlert(req: GetAlertRequest): Promise<GetAlertResponse>;
@@ -192,6 +196,7 @@ declare namespace SDK {
         name: {
           $regex?: string;
         };
+        repairWorkshop?: string;
       };
     };
   };
@@ -209,6 +214,17 @@ declare namespace SDK {
 
   type CreateAlertResponse = {
     body: Alert;
+  };
+
+  type ExportAlertsRequest = {
+    body: AlertExportsBody;
+  };
+
+  type ExportAlertsResponse = {
+    body: [Alert];
+    headers: {
+      xTotalCount: string;
+    };
   };
 
   type GetAlertRequest = {
@@ -266,6 +282,7 @@ declare namespace SDK {
           $gt?: string;
           $lt?: string;
         };
+        repairWorkshop?: string;
       };
     };
   };
@@ -369,6 +386,8 @@ declare namespace SDK {
 
   type GetTicketsStatsRequest = {
     query: {
+      group?: string;
+
       filter: {
         stage?: string;
         ns: {
@@ -515,6 +534,7 @@ declare namespace SDK {
           $lt?: number;
         };
         action?: number;
+        repairWorkshop?: string;
       };
     };
   };
@@ -821,6 +841,9 @@ declare namespace SDK {
     content: string;
   };
   type TemplateUpdateBody = {
+    content: string;
+  };
+  type AlertExportsBody = {
     content: string;
   };
   type Err = {
